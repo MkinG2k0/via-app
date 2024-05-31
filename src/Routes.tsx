@@ -16,6 +16,18 @@ const GlobalStyle = createGlobalStyle`
   *:focus {
     outline: none;
   }
+  *::-webkit-scrollbar {
+		width: 10px;
+		height: 10px;
+	}
+
+	*::-webkit-scrollbar-track {
+		background: transparent;
+	}
+
+	*::-webkit-scrollbar-thumb {
+		background-color: var(--color_accent);
+	}
 `
 
 export default () => {

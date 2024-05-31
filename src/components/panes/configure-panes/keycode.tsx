@@ -1,4 +1,5 @@
 import { FC, useState, useEffect, useMemo } from 'react'
+import { IKeycodeGroupItem } from 'src/utils/keycode-group'
 import styled from 'styled-components'
 import { Button } from '../../inputs/button'
 import { KeycodeModal } from '../../inputs/custom-keycode-modal'
@@ -32,7 +33,12 @@ import {
 	updateSelectedKey,
 } from 'src/store/keymapSlice'
 import { getMacroCount } from 'src/store/macrosSlice'
-import { disableGlobalHotKeys, enableGlobalHotKeys, getDisableFastRemap } from 'src/store/settingsSlice'
+import {
+	disableGlobalHotKeys,
+	enableGlobalHotKeys,
+	getDisableFastRemap,
+	getDisableGroupKeys,
+} from 'src/store/settingsSlice'
 import { getNextKey } from 'src/utils/keyboard-rendering'
 const KeycodeList = styled.div`
 	display: grid;
@@ -40,6 +46,10 @@ const KeycodeList = styled.div`
 	grid-auto-rows: 64px;
 	justify-content: center;
 	grid-gap: 10px;
+`
+
+const KeycodeGroup = styled.div`
+	padding: 5px 0;
 `
 
 const MenuContainer = styled.div`
@@ -140,6 +150,7 @@ export const KeycodePane: FC = () => {
 	const selectedKeyDefinitions = useAppSelector(getSelectedKeyDefinitions)
 	const { basicKeyToByte } = useAppSelector(getBasicKeyToByte)
 	const macroCount = useAppSelector(getMacroCount)
+	const disableGroupKeys = useAppSelector(getDisableGroupKeys)
 
 	const KeycodeCategories = useMemo(
 		() => generateKeycodeCategories(basicKeyToByte, macroCount),
@@ -296,13 +307,65 @@ export const KeycodePane: FC = () => {
 		}
 	}
 
-	const selectedCategoryKeycodes = KeycodeCategories.find(({ id }) => id === selectedCategory)?.keycodes as IKeycode[]
+	const renderSelectedCategoryWithGroup = (keycodes: IKeycodeGroupItem[], selectedCategory: string) => {
+		const keycodeListItems = keycodes.map(({ keycodes, name }, i) => {
+			// renderKeycode(keycode, i)
+			return (
+				<div key={name}>
+					<KeycodeGroup>{name}</KeycodeGroup>
+					<KeycodeList>{keycodes.map((keycode, i) => renderKeycode(keycode, i))}</KeycodeList>
+				</div>
+			)
+		})
+
+		switch (selectedCategory) {
+			case 'macro': {
+				return !macros.isFeatureSupported ? renderMacroError() : <KeycodeList>{keycodeListItems}</KeycodeList>
+			}
+			case 'special': {
+				return <KeycodeList>{keycodeListItems.concat(renderCustomKeycode())}</KeycodeList>
+			}
+			case 'custom': {
+				if (
+					(!isVIADefinitionV2(selectedDefinition) && !isVIADefinitionV3(selectedDefinition)) ||
+					!selectedDefinition.customKeycodes
+				) {
+					return null
+				}
+				return (
+					<KeycodeList>
+						{selectedDefinition.customKeycodes.map((keycode, idx) => {
+							return renderKeycode(
+								{
+									...keycode,
+									code: `CUSTOM(${idx})`,
+								},
+								idx,
+							)
+						})}
+					</KeycodeList>
+				)
+			}
+			default: {
+				return <div>{keycodeListItems}</div>
+			}
+		}
+	}
+
+	const findSelectedCategory = KeycodeCategories.find(({ id }) => id === selectedCategory)!
+	const isAvailableGroup = !disableGroupKeys && Boolean(findSelectedCategory?.keycodeGroup)
 
 	return (
 		<>
 			<SubmenuOverflowCell>{renderCategories()}</SubmenuOverflowCell>
 			<OverflowCell>
-				<KeycodeContainer>{renderSelectedCategory(selectedCategoryKeycodes, selectedCategory)}</KeycodeContainer>
+				{isAvailableGroup ? (
+					<KeycodeContainer>
+						{renderSelectedCategoryWithGroup(findSelectedCategory.keycodeGroup!, selectedCategory)}
+					</KeycodeContainer>
+				) : (
+					<KeycodeContainer>{renderSelectedCategory(findSelectedCategory.keycodes, selectedCategory)}</KeycodeContainer>
+				)}
 				<KeycodeDesc>{mouseOverDesc}</KeycodeDesc>
 				{showKeyTextInputModal && renderKeyInputModal()}
 			</OverflowCell>

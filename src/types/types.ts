@@ -85,6 +85,7 @@ export type Settings = {
 	showDesignTab: boolean
 	disableFastRemap: boolean
 	disableRecordKeyboard: boolean
+	disableGroupKeys: boolean
 	renderMode: '3D' | '2D'
 	themeMode: 'light' | 'dark'
 	themeName: string

@@ -18,6 +18,8 @@ import {
 	updateRenderMode,
 	getDisableRecordKeyboard,
 	toggleRecordKeyboard,
+	getDisableGroupKeys,
+	toggleGroupKeys,
 } from 'src/store/settingsSlice'
 import { AccentSelect } from '../inputs/accent-select'
 import { THEMES } from 'src/utils/themes'
@@ -51,6 +53,7 @@ export const Settings = () => {
 	const showDesignTab = useAppSelector(getShowDesignTab)
 	const disableFastRemap = useAppSelector(getDisableFastRemap)
 	const disableRecordKeyboard = useAppSelector(getDisableRecordKeyboard)
+	const disableGroupKeys = useAppSelector(getDisableGroupKeys)
 	const themeMode = useAppSelector(getThemeMode)
 	const themeName = useAppSelector(getThemeName)
 	const renderMode = useAppSelector(getRenderMode)
@@ -108,6 +111,12 @@ export const Settings = () => {
 							<Label>Record Keyboard</Label>
 							<Detail>
 								<AccentSlider isChecked={!disableRecordKeyboard} onChange={() => dispatch(toggleRecordKeyboard())} />
+							</Detail>
+						</ControlRow>
+						<ControlRow>
+							<Label>Group Keys</Label>
+							<Detail>
+								<AccentSlider isChecked={!disableGroupKeys} onChange={() => dispatch(toggleGroupKeys())} />
 							</Detail>
 						</ControlRow>
 						<ControlRow>

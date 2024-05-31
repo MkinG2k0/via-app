@@ -38,6 +38,9 @@ const settingsSlice = createSlice({
 		toggleRecordKeyboard: (state) => {
 			toggleBool(state, 'disableRecordKeyboard')
 		},
+		toggleGroupKeys: (state) => {
+			toggleBool(state, 'disableGroupKeys')
+		},
 		toggleCreatorMode: (state) => {
 			toggleBool(state, 'showDesignTab')
 		},
@@ -101,6 +104,7 @@ export const {
 	updateRenderMode,
 	updateThemeName,
 	updateDesignDefinitionVersion,
+	toggleGroupKeys,
 } = settingsSlice.actions
 
 export default settingsSlice.reducer
@@ -109,6 +113,7 @@ export const getDesignDefinitionVersion = (state: RootState) => state.settings.d
 export const getAllowGlobalHotKeys = (state: RootState) => state.settings.allowGlobalHotKeys
 export const getDisableFastRemap = (state: RootState) => state.settings.disableFastRemap
 export const getDisableRecordKeyboard = (state: RootState) => state.settings.disableRecordKeyboard
+export const getDisableGroupKeys = (state: RootState) => state.settings.disableGroupKeys
 export const getShowDesignTab = (state: RootState) => state.settings.showDesignTab
 export const getRestartRequired = (state: RootState) => state.settings.restartRequired
 export const getIsTestMatrixEnabled = (state: RootState) => state.settings.isTestMatrixEnabled
