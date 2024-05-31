@@ -23,12 +23,11 @@ module.exports = {
 		'plugin:react/recommended',
 		'plugin:@typescript-eslint/recommended',
 		'plugin:import/typescript',
-		'plugin:perfectionist/recommended-natural',
 	],
 	overrides: [],
 	parser: '@typescript-eslint/parser',
 
-	plugins: ['perfectionist', 'react', '@typescript-eslint', 'jsx-a11y', 'promise'],
+	plugins: ['react', '@typescript-eslint', 'jsx-a11y', 'promise'],
 	rules: {
 		indent: [
 			'off',
@@ -48,7 +47,6 @@ module.exports = {
 			},
 		],
 		// off
-		'perfectionist/sort-objects': [0],
 		'@typescript-eslint/ban-ts-comment': [0],
 		quotes: ['warn', 'single'],
 		semi: ['warn', 'never'],
@@ -61,7 +59,6 @@ module.exports = {
 		'@typescript-eslint/no-namespace': [0],
 		// warn
 		'@typescript-eslint/no-explicit-any': [1],
-		'perfectionist/sort-jsx-props': [1],
 		'react/jsx-curly-brace-presence': [1, { props: 'always', propElementValues: 'always' }],
 		'max-len': [1, { code: 120, tabWidth: 2, comments: 120 }],
 		'@typescript-eslint/no-empty-function': [1],

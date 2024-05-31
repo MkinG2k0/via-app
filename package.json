@@ -4,6 +4,7 @@
     "start": "concurrently --names \"vite,azure-fn-dev\" -c \"bgBlue,bgMagenta\" \"npm run dev\" \"npm --prefix api start\"",
     "dev": "node scripts/build-definitions.js && vite --force",
     "lint": "eslint --fix ./src/**/*.ts*",
+    "lint:prettier": "prettier --write \"src/**/*.{js,jsx,ts,tsx}\"",
     "build": "npm run build:kbs && tsc && vite build",
     "format": "prettier --write \"src/**/*.{js,jsx,ts,tsx}\"",
     "refresh-kbs": "npm uninstall --force via-keyboards && npm install --force github:the-via/keyboards",
@@ -75,7 +76,6 @@
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-jsx-a11y": "^6.8.0",
     "eslint-plugin-import": "^2.29.1",
-    "eslint-plugin-perfectionist": "^2.10.0",
     "eslint-plugin-prettier": "^5.1.3",
     "eslint-plugin-promise": "^6.1.1",
     "eslint-plugin-react": "^7.34.1"

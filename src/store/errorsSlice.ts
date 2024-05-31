@@ -1,77 +1,70 @@
-import {RootState} from './index';
-import {createSlice, PayloadAction} from '@reduxjs/toolkit';
-import {DeviceInfo} from 'src/types/types';
+import { RootState } from './index'
+import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { DeviceInfo } from 'src/types/types'
 
 export type KeyboardAPIError = {
-  commandName: string;
-  commandBytes: number[];
-  responseBytes: number[];
-  deviceInfo: DeviceInfo;
-};
+	commandName: string
+	commandBytes: number[]
+	responseBytes: number[]
+	deviceInfo: DeviceInfo
+}
 
 export type AppError = {
-  timestamp: string;
-  message: string;
-  deviceInfo: DeviceInfo;
-};
+	timestamp: string
+	message: string
+	deviceInfo: DeviceInfo
+}
 
 export const extractDeviceInfo = (device: DeviceInfo): DeviceInfo => ({
-  productId: device.productId,
-  vendorId: device.vendorId,
-  productName: device.productName,
-  protocol: device.protocol,
-});
+	productId: device.productId,
+	vendorId: device.vendorId,
+	productName: device.productName,
+	protocol: device.protocol,
+})
 
 type ErrorsState = {
-  appErrors: AppError[];
-};
+	appErrors: AppError[]
+}
 
 const initialState: ErrorsState = {
-  appErrors: [],
-};
+	appErrors: [],
+}
 
 export const getErrorTimestamp = () => {
-  const now = new Date();
-  return `${now.toLocaleTimeString([], {hour12: false})}.${now
-    .getMilliseconds()
-    .toString()
-    .padStart(3, '0')}`;
-};
+	const now = new Date()
+	return `${now.toLocaleTimeString([], { hour12: false })}.${now.getMilliseconds().toString().padStart(3, '0')}`
+}
 
 export const extractMessageFromKeyboardAPIError = (error: KeyboardAPIError) =>
-  `Command Name: ${error.commandName}
+	`Command Name: ${error.commandName}
 Command: ${formatBytes(error.commandBytes)}
-Response: ${formatBytes(error.responseBytes)}`;
-export const getMessageFromError = (e: Error) => e.stack || e.message;
-const formatBytes = (bytes: number[]) => bytes.join(' ');
+Response: ${formatBytes(error.responseBytes)}`
+export const getMessageFromError = (e: Error) => e.stack || e.message
+const formatBytes = (bytes: number[]) => bytes.join(' ')
 
 const errorsSlice = createSlice({
-  name: 'errors',
-  initialState,
-  reducers: {
-    logAppError: (
-      state,
-      action: PayloadAction<Omit<AppError, 'timestamp'>>,
-    ) => {
-      state.appErrors.push({...action.payload, timestamp: getErrorTimestamp()});
-    },
-    logKeyboardAPIError: (state, action: PayloadAction<KeyboardAPIError>) => {
-      const {deviceInfo} = action.payload;
-      state.appErrors.push({
-        timestamp: getErrorTimestamp(),
-        message: extractMessageFromKeyboardAPIError(action.payload),
-        deviceInfo,
-      });
-    },
-    clearAppErrors: (state) => {
-      state.appErrors = [];
-    },
-  },
-});
+	name: 'errors',
+	initialState,
+	reducers: {
+		logAppError: (state, action: PayloadAction<Omit<AppError, 'timestamp'>>) => {
+			state.appErrors.push({ ...action.payload, timestamp: getErrorTimestamp() })
+		},
+		logKeyboardAPIError: (state, action: PayloadAction<KeyboardAPIError>) => {
+			const { deviceInfo } = action.payload
+			state.appErrors.push({
+				timestamp: getErrorTimestamp(),
+				message: extractMessageFromKeyboardAPIError(action.payload),
+				deviceInfo,
+			})
+		},
+		clearAppErrors: (state) => {
+			state.appErrors = []
+		},
+	},
+})
 
-export const {logKeyboardAPIError, logAppError, clearAppErrors} =
-  errorsSlice.actions;
+export const { logKeyboardAPIError, logAppError, clearAppErrors } = errorsSlice.actions
 
-export default errorsSlice.reducer;
+export default errorsSlice.reducer
 
-export const getAppErrors = (state: RootState) => state.errors.appErrors;
+export const getAppErrors = (state: RootState) => state.errors.appErrors
