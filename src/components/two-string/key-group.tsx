@@ -1,4 +1,4 @@
-import {useCallback, useEffect, useMemo, useState} from 'react';
+import {useMemo} from 'react';
 import {getBasicKeyToByte} from 'src/store/definitionsSlice';
 import {useAppDispatch, useAppSelector} from 'src/store/hooks';
 import {getSelectedKey} from 'src/store/keymapSlice';
@@ -85,6 +85,7 @@ export const KeyGroup: React.FC<KeyGroupProps<React.MouseEvent>> = (props) => {
             labels,
             skipFontCheck,
           )}
+          key={`${k.row}-${k.col}`}
         />
       );
     });

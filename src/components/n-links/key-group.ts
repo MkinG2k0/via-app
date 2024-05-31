@@ -56,7 +56,7 @@ export function getKeycapSharedProps<T>(
     idx: idx,
     label: labels[i],
     onClick: onClick,
-    key: keysKeys.indices[i],
+    keyboardKeys: keysKeys.indices[i],
     skipFontCheck,
   };
 }

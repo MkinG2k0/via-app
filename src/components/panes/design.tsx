@@ -172,9 +172,13 @@ function importDefinitions(
                   []
             ).map(
               (e) =>
-                `${fileName} ${e.dataPath ? e.dataPath + ': ' : 'Object: '}${
+              {
+                const path = (e as unknown as {dataPath: string}).dataPath
+
+                return  `${fileName} ${path ?path + ': ' : 'Object: '}${
                   e.message
-                }`,
+                }`
+              },
             );
           }
         } catch (err: any) {

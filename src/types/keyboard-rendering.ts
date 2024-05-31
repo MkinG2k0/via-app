@@ -86,7 +86,7 @@ export type KeycapSharedProps<T> = {
   textureWidth: number;
   textureHeight: number;
   mode: DisplayMode;
-  key: string;
+  keyboardKeys: string;
   skipFontCheck: boolean;
 } & Omit<KeyCoords<T>, 'meshKey'>;
 
