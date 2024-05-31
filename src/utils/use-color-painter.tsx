@@ -4,7 +4,6 @@ import { useCallback, useEffect, useState } from 'react'
 import { getSelectedConnectedDevice, getSelectedKeyboardAPI } from 'src/store/devicesSlice'
 import { useAppSelector } from 'src/store/hooks'
 import { getSelectedCustomMenuData } from 'src/store/menusSlice'
-
 import { getHSVFrom256 } from './color-math'
 
 export const useColorPainter = (keys: VIAKey[], selectedPaletteColor: [number, number]) => {
@@ -29,7 +28,7 @@ export const useColorPainter = (keys: VIAKey[], selectedPaletteColor: [number, n
 	}, [customMenuData.__perKeyRGB && customMenuData.__perKeyRGB.length, keys])
 
 	const onKeycapPointerHandler = useCallback(
-		(evt: React.MouseEvent | ThreeEvent<MouseEvent>, idx: number) => {
+		(evt: ThreeEvent<MouseEvent> | React.MouseEvent, idx: number) => {
 			if (evt.buttons === 1 && api) {
 				const hue = Math.round((selectedPaletteColor[0] * 255) / 360)
 				const sat = Math.round(selectedPaletteColor[1] * 255)

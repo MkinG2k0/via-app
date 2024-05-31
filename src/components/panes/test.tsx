@@ -1,30 +1,29 @@
-import { faCircleQuestion } from '@fortawesome/free-solid-svg-icons'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { useProgress } from '@react-three/drei'
 import React, { FC, useContext } from 'react'
+import fullKeyboardDefinition from '../../utils/test-keyboard-definition.json'
+import { Pane } from './pane'
+import styled from 'styled-components'
+import { PROTOCOL_GAMMA } from '../../utils/keyboard-api'
+import { ControlRow, Label, Detail, MenuCell, Row, IconContainer, Grid, SpanOverflowCell } from './grid'
+import { AccentSlider } from '../inputs/accent-slider'
+import { AccentButton } from '../inputs/accent-button'
 import { useDispatch } from 'react-redux'
-import { getSelectedDefinition, getSelectedKeyDefinitions } from 'src/store/definitionsSlice'
-import { getSelectedConnectedDevice } from 'src/store/devicesSlice'
 import { useAppSelector } from 'src/store/hooks'
+import { getSelectedConnectedDevice } from 'src/store/devicesSlice'
+import { getSelectedDefinition, getSelectedKeyDefinitions } from 'src/store/definitionsSlice'
 import {
 	getIsTestMatrixEnabled,
+	setTestMatrixEnabled,
 	getTestKeyboardSoundsSettings,
 	setTestKeyboardSoundsSettings,
-	setTestMatrixEnabled,
 } from 'src/store/settingsSlice'
-import styled from 'styled-components'
-
-import { PROTOCOL_GAMMA } from '../../utils/keyboard-api'
-import fullKeyboardDefinition from '../../utils/test-keyboard-definition.json'
-import { AccentButton } from '../inputs/accent-button'
-import { AccentRange } from '../inputs/accent-range'
-import { AccentSelect } from '../inputs/accent-select'
-import { AccentSlider } from '../inputs/accent-slider'
-import { MenuTooltip } from '../inputs/tooltip'
-import { TestKeyboardSoundsMode } from '../void/test-keyboard-sounds'
 import { MenuContainer } from './configure-panes/custom/menu-generator'
-import { ControlRow, Detail, Grid, IconContainer, Label, MenuCell, Row, SpanOverflowCell } from './grid'
-import { Pane } from './pane'
+import { MenuTooltip } from '../inputs/tooltip'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faCircleQuestion } from '@fortawesome/free-solid-svg-icons'
+import { useProgress } from '@react-three/drei'
+import { AccentSelect } from '../inputs/accent-select'
+import { AccentRange } from '../inputs/accent-range'
+import { TestKeyboardSoundsMode } from '../void/test-keyboard-sounds'
 
 const Container = styled.div`
 	display: flex;

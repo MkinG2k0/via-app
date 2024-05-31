@@ -1,17 +1,16 @@
-import { ErrorBoundary } from '@sentry/react'
-import { useMemo, useState } from 'react'
-import { createGlobalStyle } from 'styled-components'
-import { Route } from 'wouter'
-
-import { Home } from './components/Home'
 import { UnconnectedGlobalMenu } from './components/menus/global'
-import { TestContext } from './components/panes/test'
+import { Route } from 'wouter'
+import PANES from './utils/pane-config'
+import { Home } from './components/Home'
+import { createGlobalStyle } from 'styled-components'
 import { CanvasRouter as CanvasRouter3D } from './components/three-fiber/canvas-router'
 import { CanvasRouter as CanvasRouter2D } from './components/two-string/canvas-router'
+import { TestContext } from './components/panes/test'
+import { useMemo, useState } from 'react'
+import { OVERRIDE_HID_CHECK } from './utils/override'
 import { useAppSelector } from './store/hooks'
 import { getRenderMode } from './store/settingsSlice'
-import { OVERRIDE_HID_CHECK } from './utils/override'
-import PANES from './utils/pane-config'
+import { ErrorBoundary } from '@sentry/react'
 
 const GlobalStyle = createGlobalStyle`
   *:focus {

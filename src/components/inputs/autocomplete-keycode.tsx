@@ -1,7 +1,6 @@
 import React from 'react'
-import styled from 'styled-components'
-
 import { getAutocompleteKeycodes } from '../../utils/autocomplete-keycodes'
+import styled from 'styled-components'
 const Keycode = styled.span`
 	color: var(--color_accent);
 	display: flex;

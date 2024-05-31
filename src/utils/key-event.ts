@@ -1,5 +1,4 @@
 import { mappingKeyboardKey } from 'src/utils/mapping-keyboard-key'
-
 import basicKeyToByte from './key-to-byte/default'
 
 export const matrixKeycodes = [

@@ -1,17 +1,15 @@
-import type { VIAKey } from '@the-via/reader'
-
-import { FC, useEffect, useState } from 'react'
-import { PelpiKeycodeInput } from 'src/components/inputs/pelpi/keycode-input'
-import { ErrorMessage } from 'src/components/styled'
-import { getSelectedKeyDefinitions } from 'src/store/definitionsSlice'
-import { getSelectedConnectedDevice, getSelectedKeyboardAPI } from 'src/store/devicesSlice'
-import { useAppDispatch, useAppSelector } from 'src/store/hooks'
-import { getSelectedKey, getSelectedKeymap, getSelectedLayerIndex, updateKey } from 'src/store/keymapSlice'
-import { KeyboardAPI } from 'src/utils/keyboard-api'
-import styled from 'styled-components'
-
-import { ControlRow, Detail, Label, SpanOverflowCell } from '../grid'
+import { FC, useState, useEffect } from 'react'
+import { Detail, Label, ControlRow, SpanOverflowCell } from '../grid'
 import { CenterPane } from '../pane'
+import styled from 'styled-components'
+import { useAppDispatch, useAppSelector } from 'src/store/hooks'
+import { PelpiKeycodeInput } from 'src/components/inputs/pelpi/keycode-input'
+import { getSelectedKeyDefinitions } from 'src/store/definitionsSlice'
+import { getSelectedKey, getSelectedKeymap, getSelectedLayerIndex, updateKey } from 'src/store/keymapSlice'
+import type { VIAKey } from '@the-via/reader'
+import { getSelectedConnectedDevice, getSelectedKeyboardAPI } from 'src/store/devicesSlice'
+import { KeyboardAPI } from 'src/utils/keyboard-api'
+import { ErrorMessage } from 'src/components/styled'
 
 const Encoder = styled(CenterPane)`
 	height: 100%;
@@ -38,7 +36,7 @@ export const Pane: FC = () => {
 	const [ccwValue, setCCWValue] = useState<number>()
 	const selectedKey = useAppSelector(getSelectedKey)
 	const dispatch = useAppDispatch()
-	const keys: ({ ei?: number } & VIAKey)[] = useAppSelector(getSelectedKeyDefinitions)
+	const keys: (VIAKey & { ei?: number })[] = useAppSelector(getSelectedKeyDefinitions)
 	const matrixKeycodes = useAppSelector((state) => getSelectedKeymap(state) || [])
 	const layer = useAppSelector(getSelectedLayerIndex)
 	const selectedDevice = useAppSelector(getSelectedConnectedDevice)
@@ -47,7 +45,7 @@ export const Pane: FC = () => {
 	const encoderKey = keys[selectedKey ?? -1]
 	const canClick = Boolean(encoderKey) && encoderKey.col !== -1 && encoderKey.row !== -1
 
-	const setEncoderValue = (type: 'ccw' | 'click' | 'cw', val: number) => {
+	const setEncoderValue = (type: 'ccw' | 'cw' | 'click', val: number) => {
 		if (api && selectedKey !== null && encoderKey && encoderKey.ei !== undefined) {
 			const encoderId = Number(encoderKey.ei)
 			switch (type) {

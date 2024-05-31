@@ -33,7 +33,7 @@ const InnerCase = styled.div<{
 
 export const CaseInsideBorder = 10
 
-export const Case = React.memo((props: { height: number; width: number }) => {
+export const Case = React.memo((props: { width: number; height: number }) => {
 	const theme = useAppSelector(getSelectedTheme)
 	const outsideColor = useMemo(() => theme[KeyColorType.Accent].c, [theme])
 	const properWidth = props.width * CSSVarObject.keyXPos - CSSVarObject.keyXSpacing

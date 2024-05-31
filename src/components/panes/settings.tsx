@@ -1,34 +1,33 @@
-import { faToolbox } from '@fortawesome/free-solid-svg-icons'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { useState } from 'react'
+import { Pane } from './pane'
+import styled from 'styled-components'
+import { ControlRow, Label, Detail, Grid, MenuCell, Row, IconContainer, SpanOverflowCell } from './grid'
+import { AccentSlider } from '../inputs/accent-slider'
 import { useDispatch } from 'react-redux'
-import { getSelectedConnectedDevice } from 'src/store/devicesSlice'
 import { useAppSelector } from 'src/store/hooks'
 import {
-	getDisableFastRemap,
-	getDisableRecordKeyboard,
-	getRenderMode,
 	getShowDesignTab,
-	getThemeMode,
-	getThemeName,
+	getDisableFastRemap,
 	toggleCreatorMode,
 	toggleFastRemap,
-	toggleRecordKeyboard,
+	getThemeMode,
 	toggleThemeMode,
-	updateRenderMode,
+	getThemeName,
 	updateThemeName,
+	getRenderMode,
+	updateRenderMode,
+	getDisableRecordKeyboard,
+	toggleRecordKeyboard,
 } from 'src/store/settingsSlice'
-import { webGLIsAvailable } from 'src/utils/test-webgl'
-import { THEMES } from 'src/utils/themes'
-import styled from 'styled-components'
-
 import { AccentSelect } from '../inputs/accent-select'
-import { AccentSlider } from '../inputs/accent-slider'
-import { MenuTooltip } from '../inputs/tooltip'
-import { ErrorMessage } from '../styled'
+import { THEMES } from 'src/utils/themes'
 import { MenuContainer } from './configure-panes/custom/menu-generator'
-import { ControlRow, Detail, Grid, IconContainer, Label, MenuCell, Row, SpanOverflowCell } from './grid'
-import { Pane } from './pane'
+import { MenuTooltip } from '../inputs/tooltip'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faToolbox } from '@fortawesome/free-solid-svg-icons'
+import { getSelectedConnectedDevice } from 'src/store/devicesSlice'
+import { ErrorMessage } from '../styled'
+import { webGLIsAvailable } from 'src/utils/test-webgl'
 
 const Container = styled.div`
 	display: flex;

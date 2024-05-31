@@ -1,13 +1,11 @@
-import { PayloadAction, createSelector, createSlice } from '@reduxjs/toolkit'
-import { VIAMenu, commonMenus, isVIADefinitionV2, isVIADefinitionV3, isVIAMenu } from '@the-via/reader'
-import { makeCustomMenu, makeCustomMenus } from 'src/components/panes/configure-panes/custom/menu-generator'
-import { KeyboardAPI } from 'src/utils/keyboard-api'
-
+import { createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit'
 import type { CommonMenusMap, ConnectedDevice } from '../types/types'
+import { commonMenus, isVIADefinitionV2, isVIADefinitionV3, isVIAMenu, VIAMenu } from '@the-via/reader'
 import type { AppThunk, RootState } from './index'
-
 import { getSelectedDefinition } from './definitionsSlice'
 import { getSelectedConnectedDevice, getSelectedDevicePath, getSelectedKeyboardAPI } from './devicesSlice'
+import { makeCustomMenu, makeCustomMenus } from 'src/components/panes/configure-panes/custom/menu-generator'
+import { KeyboardAPI } from 'src/utils/keyboard-api'
 
 type CustomMenuData = {
 	[commandName: string]: number[] | number[][]
@@ -15,8 +13,8 @@ type CustomMenuData = {
 type CustomMenuDataMap = { [devicePath: string]: CustomMenuData }
 
 type MenusState = {
-	commonMenusMap: CommonMenusMap
 	customMenuDataMap: CustomMenuDataMap
+	commonMenusMap: CommonMenusMap
 	showKeyPainter: boolean
 }
 
@@ -33,7 +31,7 @@ const menusSlice = createSlice({
 		updateShowKeyPainter: (state, action: PayloadAction<boolean>) => {
 			state.showKeyPainter = action.payload
 		},
-		updateSelectedCustomMenuData: (state, action: PayloadAction<{ devicePath: string; menuData: CustomMenuData }>) => {
+		updateSelectedCustomMenuData: (state, action: PayloadAction<{ menuData: CustomMenuData; devicePath: string }>) => {
 			const { devicePath, menuData } = action.payload
 			state.customMenuDataMap[devicePath] = menuData
 		},

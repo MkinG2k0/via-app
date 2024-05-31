@@ -1,13 +1,11 @@
-import type { FC } from 'react'
-
-import { LightingValue, getLightingDefinition, isVIADefinitionV2 } from '@the-via/reader'
 import React from 'react'
-import { getSelectedDefinition } from 'src/store/definitionsSlice'
+import styled from 'styled-components'
+import { getLightingDefinition, isVIADefinitionV2, LightingValue } from '@the-via/reader'
+import { LightingControl, ControlMeta } from './lighting-control'
 import { useAppSelector } from 'src/store/hooks'
 import { getSelectedLightingData } from 'src/store/lightingSlice'
-import styled from 'styled-components'
-
-import { ControlMeta, LightingControl } from './lighting-control'
+import { getSelectedDefinition } from 'src/store/definitionsSlice'
+import type { FC } from 'react'
 
 export const AdvancedLightingValues = [
 	LightingValue.BACKLIGHT_DISABLE_WHEN_USB_SUSPENDED,
@@ -28,8 +26,8 @@ const AccentText = styled.span`
 
 type AdvancedControlMeta = [
 	LightingValue,
-	React.FC<any> | string,
-	{ type: string } & Partial<{ max?: number; min?: number }>,
+	string | React.FC<any>,
+	{ type: string } & Partial<{ min?: number; max?: number }>,
 ]
 
 const RGBControls: ControlMeta[] = [

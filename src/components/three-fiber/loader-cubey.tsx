@@ -1,11 +1,11 @@
 import { PresentationControls, useGLTF } from '@react-three/drei'
-import { useFrame } from '@react-three/fiber'
-import cubeySrc from 'assets/models/cubey.glb'
 import React, { useRef } from 'react'
+import cubeySrc from 'assets/models/cubey.glb'
+import { useFrame } from '@react-three/fiber'
 import { shallowEqual } from 'react-redux'
-import { getDarkenedColor } from 'src/utils/color-math'
-import { Theme } from 'src/utils/themes'
 import { Color, Mesh, MeshBasicMaterial, MeshStandardMaterial } from 'three'
+import { Theme } from 'src/utils/themes'
+import { getDarkenedColor } from 'src/utils/color-math'
 
 export const LoaderCubey: React.FC<{ theme: Theme; visible: boolean }> = React.memo(({ visible, theme }) => {
 	const cubeyGLTF = useGLTF(cubeySrc)

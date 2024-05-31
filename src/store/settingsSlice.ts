@@ -1,22 +1,20 @@
-import { PayloadAction, createSelector, createSlice } from '@reduxjs/toolkit'
-import { DefinitionVersion } from '@the-via/reader'
-import { updateCSSVariables } from 'src/utils/color-math'
-import { makeSRGBTheme } from 'src/utils/keyboard-rendering'
-import { webGLIsAvailable } from 'src/utils/test-webgl'
-import { THEMES } from 'src/utils/themes'
-
-import type { RootState } from '.'
-import type { PropertiesOfType } from '../types/generic-types'
+import { createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit'
 import type { MacroEditorSettings, Settings, TestKeyboardSoundsSettings } from '../types/types'
-
+import type { PropertiesOfType } from '../types/generic-types'
 import { getSettings, setSettings } from '../utils/device-store'
+import type { RootState } from '.'
+import { THEMES } from 'src/utils/themes'
+import { makeSRGBTheme } from 'src/utils/keyboard-rendering'
+import { updateCSSVariables } from 'src/utils/color-math'
+import { webGLIsAvailable } from 'src/utils/test-webgl'
+import { DefinitionVersion } from '@the-via/reader'
 
 // TODO: why are these settings mixed? Is it because we only want some of them cached? SHould we rename to "CachedSettings"?
-type SettingsState = {
-	allowGlobalHotKeys: boolean
+type SettingsState = Settings & {
 	isTestMatrixEnabled: boolean
 	restartRequired: boolean
-} & Settings
+	allowGlobalHotKeys: boolean
+}
 
 const initialState: SettingsState = {
 	...getSettings(),
@@ -49,7 +47,7 @@ const settingsSlice = createSlice({
 			state.themeMode = newThemeMode
 			setSettings(state)
 		},
-		updateRenderMode: (state, action: PayloadAction<'2D' | '3D'>) => {
+		updateRenderMode: (state, action: PayloadAction<'3D' | '2D'>) => {
 			state.renderMode = action.payload
 			setSettings(state)
 		},

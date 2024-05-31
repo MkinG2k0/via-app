@@ -36,21 +36,21 @@ const MacroControlGroupDivider = styled.div`
 `
 
 export const MacroEditControls: React.FC<{
-	addText: () => void
-	deleteMacro(): void
-	hasUnsavedChanges?: boolean
-	isDelaySupported: boolean
-	isEmpty?: boolean
 	isFullscreen: boolean
 	isRecording: boolean
 	optimizeRecording: boolean
 	recordDelays: boolean
-	recordingToggleChange: (a: boolean) => void
+	hasUnsavedChanges?: boolean
+	undoChanges(): void
+	deleteMacro(): void
 	saveChanges(): void
-	toggleFullscreen(): void
 	toggleOptimizeRecording(): void
 	toggleRecordDelays(): void
-	undoChanges(): void
+	toggleFullscreen(): void
+	isEmpty?: boolean
+	recordingToggleChange: (a: boolean) => void
+	addText: () => void
+	isDelaySupported: boolean
 }> = ({
 	isFullscreen,
 	isRecording,

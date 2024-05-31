@@ -6,8 +6,8 @@ const LoadingText = styled.div`
 `
 
 enum LoadingLabel {
-	Loading = 'Loading...',
 	Searching = 'Searching for devices...',
+	Loading = 'Loading...',
 }
 
 type Props = {

@@ -1,9 +1,8 @@
 import { useEffect } from 'react'
-import { useAppSelector } from 'src/store/hooks'
 import { getTestKeyboardSoundsSettings } from 'src/store/settingsSlice'
 import { TestKeyState } from 'src/types/types'
-
 import { Note, setGlobalAmpGain } from '../../utils/note'
+import { useAppSelector } from 'src/store/hooks'
 
 export enum TestKeyboardSoundsMode {
 	Random,

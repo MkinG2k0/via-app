@@ -1,17 +1,17 @@
-import { Result, VIAKey, getBoundingBox } from '@the-via/reader'
+import { getBoundingBox, Result, VIAKey } from '@the-via/reader'
 import { useAppDispatch } from 'src/store/hooks'
 import { updateSelectedKey } from 'src/store/keymapSlice'
-import { KeyGroupProps, KeycapSharedProps, KeysKeys } from 'src/types/keyboard-rendering'
+import { KeycapSharedProps, KeyGroupProps, KeysKeys } from 'src/types/keyboard-rendering'
 import { getByteToKey } from 'src/utils/key'
 import { getBasicKeyDict } from 'src/utils/key-to-byte/dictionary-store'
 import {
-	KeycapMetric,
 	calculatePointPosition,
-	getKeyId,
 	getKeyboardRowPartitions,
+	getKeyId,
 	getLabel,
 	getMeshName,
 	getScale,
+	KeycapMetric,
 } from 'src/utils/keyboard-rendering'
 
 export function getKeycapSharedProps<T>(
@@ -19,7 +19,7 @@ export function getKeycapSharedProps<T>(
 	i: number,
 	props: KeyGroupProps<T>,
 	keysKeys: KeysKeys<T>,
-	selectedKeyIndex: null | number,
+	selectedKeyIndex: number | null,
 	labels: any[],
 	skipFontCheck: boolean,
 ): KeycapSharedProps<T> {

@@ -1,15 +1,14 @@
-import { useCombobox } from 'downshift'
 import { useState } from 'react'
-import { getBasicKeyToByte, getSelectedDefinition } from 'src/store/definitionsSlice'
-import { useAppSelector } from 'src/store/hooks'
 import styled from 'styled-components'
-
-import { advancedStringToKeycode, anyKeycodeToString } from '../../utils/advanced-keys'
-import { IKeycode, getKeycodesForKeyboard } from '../../utils/key'
 import { AccentButton, PrimaryAccentButton } from './accent-button'
 import { AutocompleteItem } from './autocomplete-keycode'
-import { ModalBackground, ModalContainer, PromptText, RowDiv } from './dialog-base'
+import { anyKeycodeToString, advancedStringToKeycode } from '../../utils/advanced-keys'
+import { useCombobox } from 'downshift'
 import TextInput from './text-input'
+import { getKeycodesForKeyboard, IKeycode } from '../../utils/key'
+import { useAppSelector } from 'src/store/hooks'
+import { getBasicKeyToByte, getSelectedDefinition } from 'src/store/definitionsSlice'
+import { ModalBackground, ModalContainer, PromptText, RowDiv } from './dialog-base'
 
 const AutocompleteContainer = styled.ul`
 	position: fixed;
@@ -33,8 +32,8 @@ const AutocompleteItemRow = styled.li`
 type KeycodeModalProps = {
 	defaultValue?: number
 	onChange?: (val: number) => void
-	onConfirm: (keycode: number) => void
 	onExit: () => void
+	onConfirm: (keycode: number) => void
 }
 
 function isHex(input: string): boolean {
@@ -77,7 +76,7 @@ function inputIsValid(input: string, basicKeyToByte: Record<string, number>): bo
 	return inputIsBasicByte(input, basicKeyToByte) || inputIsAdvancedKeyCode(input, basicKeyToByte) || inputIsHex(input)
 }
 
-function keycodeFromInput(input: string, basicKeyToByte: Record<string, number>): null | number {
+function keycodeFromInput(input: string, basicKeyToByte: Record<string, number>): number | null {
 	if (inputIsBasicByte(input, basicKeyToByte)) {
 		return basicByteFromInput(input, basicKeyToByte)
 	}

@@ -5,7 +5,6 @@ import { setSelectedPaletteColor } from 'src/store/keymapSlice'
 import { updateShowKeyPainter } from 'src/store/menusSlice'
 import { getRGB } from 'src/utils/color-math'
 import styled from 'styled-components'
-
 import { ColorPicker } from './color-picker'
 
 type Props = {

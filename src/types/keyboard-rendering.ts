@@ -4,10 +4,10 @@ import { TestKeyState } from 'src/types/types'
 import { BufferGeometry } from 'three'
 
 export enum DisplayMode {
-	Configure = 2,
-	ConfigureColors = 4,
-	Design = 3,
 	Test = 1,
+	Configure = 2,
+	Design = 3,
+	ConfigureColors = 4,
 }
 
 export enum KeycapState {
@@ -23,68 +23,68 @@ export type KeyColorPair = {
 export type NDimension = '2D' | '3D'
 
 export type KeyboardCanvasContentProps<T> = {
-	definition: VIADefinitionV2 | VIADefinitionV3
-	height: number
-	keyColors?: number[][]
-	keys: ({ ei?: number } & VIAKey)[]
+	selectable: boolean
 	matrixKeycodes: number[]
+	keys: (VIAKey & { ei?: number })[]
+	definition: VIADefinitionV2 | VIADefinitionV3
+	pressedKeys?: TestKeyState[]
 	mode: DisplayMode
+	showMatrix?: boolean
+	selectedKey?: number
+	keyColors?: number[][]
 	onKeycapPointerDown?: (e: T, idx: number) => void
 	onKeycapPointerOver?: (e: T, idx: number) => void
-	pressedKeys?: TestKeyState[]
-	selectable: boolean
-	selectedKey?: number
-	showMatrix?: boolean
 	width: number
+	height: number
 }
 
-export type KeyboardCanvasProps<T> = {
-	containerDimensions: DOMRect
+export type KeyboardCanvasProps<T> = Omit<KeyboardCanvasContentProps<T>, 'width' | 'height'> & {
 	shouldHide?: boolean
-} & Omit<KeyboardCanvasContentProps<T>, 'height' | 'width'>
+	containerDimensions: DOMRect
+}
 
 export type KeyGroupProps<T> = {
-	definition: VIADefinitionV2 | VIADefinitionV3
-	keyColors?: number[][]
+	selectable?: boolean
 	keys: VIAKey[]
 	matrixKeycodes: number[]
+	definition: VIADefinitionV2 | VIADefinitionV3
 	mode: DisplayMode
+	pressedKeys?: TestKeyState[]
+	keyColors?: number[][]
+	selectedKey?: number
 	onKeycapPointerDown?: (e: T, idx: number) => void
 	onKeycapPointerOver?: (e: T, idx: number) => void
-	pressedKeys?: TestKeyState[]
-	selectable?: boolean
-	selectedKey?: number
 }
 
 export type KeyCoords<T> = {
+	position: [number, number, number]
+	rotation: [number, number, number]
+	scale: [number, number, number]
 	color: KeyColorPair
 	idx: number
 	meshKey: string
 	onClick: (e: T, idx: number) => void
 	onPointerDown?: (e: T, idx: number) => void
 	onPointerOver?: (e: T, idx: number) => void
-	position: [number, number, number]
-	rotation: [number, number, number]
-	scale: [number, number, number]
 }
 
 export type KeysKeys<T> = {
-	coords: KeyCoords<T>[]
 	indices: string[]
+	coords: KeyCoords<T>[]
 }
 
 export type KeycapSharedProps<T> = {
+	label: any
+	selected: boolean
 	disabled: boolean
 	keyState: number
-	keyboardKeys: string
-	label: any
-	mode: DisplayMode
-	selected: boolean
 	shouldRotate: boolean
-	skipFontCheck: boolean
-	textureHeight: number
 	textureOffsetX: number
 	textureWidth: number
+	textureHeight: number
+	mode: DisplayMode
+	keyboardKeys: string
+	skipFontCheck: boolean
 } & Omit<KeyCoords<T>, 'meshKey'>
 
 export type TwoStringKeycapProps = {

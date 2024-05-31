@@ -1,23 +1,22 @@
 import { Component } from 'react'
+import styled from 'styled-components'
 import Select from 'react-select'
+import {
+	getEncoderModes,
+	setEncoderModes,
+	getDefaultOLED,
+	setDefaultOLED,
+	getOLEDMode,
+	setOLEDMode,
+	getCustomEncoderConfig,
+	setCustomEncoderConfig,
+} from './api'
+import { EncoderModeToggle } from './encoder-mode-toggle'
+import { EncoderCustomConfig } from './encoder-custom-config'
+import { KeyboardAPI } from '../../../../../utils/keyboard-api'
 import { getSelectedKeyboardAPI } from 'src/store/devicesSlice'
 import { useAppSelector } from 'src/store/hooks'
 import { EncoderBehavior } from 'src/types/types'
-import styled from 'styled-components'
-
-import { KeyboardAPI } from '../../../../../utils/keyboard-api'
-import {
-	getCustomEncoderConfig,
-	getDefaultOLED,
-	getEncoderModes,
-	getOLEDMode,
-	setCustomEncoderConfig,
-	setDefaultOLED,
-	setEncoderModes,
-	setOLEDMode,
-} from './api'
-import { EncoderCustomConfig } from './encoder-custom-config'
-import { EncoderModeToggle } from './encoder-mode-toggle'
 
 type EnabledEncoderModes = number
 type OLEDMode = number
@@ -69,9 +68,9 @@ const OLED_OPTIONS = [
 ]
 
 type State = {
-	currOLEDMode: number
-	defaultOLEDMode: number
 	enabledModes: number
+	defaultOLEDMode: number
+	currOLEDMode: number
 	encoderBehaviors: EncoderBehavior[]
 }
 
@@ -85,6 +84,21 @@ export const SatisfactionMenu = () => {
 }
 
 class BaseSatisfactionMenu extends Component<{ api: KeyboardAPI }, State> {
+	state = {
+		enabledModes: 0x1f,
+		defaultOLEDMode: 0,
+		currOLEDMode: 0,
+		encoderBehaviors: [
+			[0, 0, 0],
+			[0, 0, 0],
+			[0, 0, 0],
+		] as EncoderBehavior[],
+	}
+
+	componentDidMount() {
+		this.fetchDataAndSet()
+	}
+
 	fetchDataAndSet = async () => {
 		const { api } = this.props
 		const promises = [
@@ -104,14 +118,6 @@ class BaseSatisfactionMenu extends Component<{ api: KeyboardAPI }, State> {
 		})
 	}
 
-	onEncoderCustomConfigChange = (encoderIdx: number, behavior: number, newValue: number) => {
-		const { api } = this.props
-		const newBehaviors = [...this.state.encoderBehaviors]
-		newBehaviors[encoderIdx][behavior] = newValue
-		this.setState({ encoderBehaviors: newBehaviors })
-		setCustomEncoderConfig(api, encoderIdx, behavior, newValue)
-	}
-
 	onEncoderModeChange = (newEncoderModes: EnabledEncoderModes) => {
 		const { api } = this.props
 		const { enabledModes: currentModes } = this.state
@@ -121,14 +127,12 @@ class BaseSatisfactionMenu extends Component<{ api: KeyboardAPI }, State> {
 		}
 	}
 
-	onOLEDChange = (input: { value: OLEDMode }) => {
-		const { value: newOLEDMode } = input
+	onEncoderCustomConfigChange = (encoderIdx: number, behavior: number, newValue: number) => {
 		const { api } = this.props
-		const { currOLEDMode } = this.state
-		if (currOLEDMode !== newOLEDMode) {
-			this.setState({ currOLEDMode: newOLEDMode })
-			setOLEDMode(api, newOLEDMode)
-		}
+		const newBehaviors = [...this.state.encoderBehaviors]
+		newBehaviors[encoderIdx][behavior] = newValue
+		this.setState({ encoderBehaviors: newBehaviors })
+		setCustomEncoderConfig(api, encoderIdx, behavior, newValue)
 	}
 
 	onOLEDDefaultChange = (input: { value: OLEDMode }) => {
@@ -141,19 +145,14 @@ class BaseSatisfactionMenu extends Component<{ api: KeyboardAPI }, State> {
 		}
 	}
 
-	state = {
-		enabledModes: 0x1f,
-		defaultOLEDMode: 0,
-		currOLEDMode: 0,
-		encoderBehaviors: [
-			[0, 0, 0],
-			[0, 0, 0],
-			[0, 0, 0],
-		] as EncoderBehavior[],
-	}
-
-	componentDidMount() {
-		this.fetchDataAndSet()
+	onOLEDChange = (input: { value: OLEDMode }) => {
+		const { value: newOLEDMode } = input
+		const { api } = this.props
+		const { currOLEDMode } = this.state
+		if (currOLEDMode !== newOLEDMode) {
+			this.setState({ currOLEDMode: newOLEDMode })
+			setOLEDMode(api, newOLEDMode)
+		}
 	}
 
 	render() {

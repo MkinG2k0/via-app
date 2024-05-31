@@ -1,16 +1,15 @@
+import { createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit'
 import type { DefinitionVersion } from '@the-via/reader'
-
-import { PayloadAction, createSelector, createSlice } from '@reduxjs/toolkit'
 import { KeyboardAPI } from 'src/utils/keyboard-api'
-
 import type { ConnectedDevice, ConnectedDevices, VendorProductIdMap } from '../types/types'
+
 import type { RootState } from './index'
 
 type DevicesState = {
+	selectedDevicePath: string | null
 	connectedDevicePaths: ConnectedDevices
-	forceAuthorize: boolean
-	selectedDevicePath: null | string
 	supportedIds: VendorProductIdMap
+	forceAuthorize: boolean
 }
 
 const initialState: DevicesState = {

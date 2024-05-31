@@ -1,17 +1,15 @@
 import { current } from '@reduxjs/toolkit'
 import {
 	DefinitionVersionMap,
+	getTheme,
 	KeyboardDefinitionIndex,
 	KeyboardDictionary,
 	ThemeDefinition,
-	getTheme,
 } from '@the-via/reader'
 import { TestKeyboardSoundsMode } from 'src/components/void/test-keyboard-sounds'
 import { THEMES } from 'src/utils/themes'
-
-import type { AuthorizedDevice, DefinitionIndex, Settings, VendorProductIdMap } from '../types/types'
-
 import { Store } from '../shims/via-app-store'
+import type { DefinitionIndex, VendorProductIdMap, Settings, AuthorizedDevice } from '../types/types'
 import { getVendorProductId } from './hid-keyboards'
 
 let deviceStore: Store
@@ -152,7 +150,7 @@ export const getThemeModeFromStore = (): 'dark' | 'light' => {
 	return deviceStore.get('settings')?.themeMode
 }
 
-export const getRenderModeFromStore = (): '2D' | '3D' => {
+export const getRenderModeFromStore = (): '3D' | '2D' => {
 	return deviceStore.get('settings')?.renderMode
 }
 

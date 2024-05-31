@@ -1,5 +1,4 @@
 import { EncoderBehavior } from 'src/types/types'
-
 import type { KeyboardAPI } from '../../../../../utils/keyboard-api'
 
 const GET_KEYBOARD_VALUE = 0x02

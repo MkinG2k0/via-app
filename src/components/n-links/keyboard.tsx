@@ -1,41 +1,39 @@
-import type { VIADefinitionV2, VIADefinitionV3 } from '@the-via/reader'
-
-import { DefinitionVersionMap, VIAKey } from '@the-via/reader'
 import { useCallback, useContext, useEffect, useMemo } from 'react'
-import { TestKeyboardSounds } from 'src/components/void/test-keyboard-sounds'
-import { getCustomDefinitions, getSelectedDefinition, getSelectedKeyDefinitions } from 'src/store/definitionsSlice'
-import { getDesignSelectedOptionKeys, getSelectedDefinitionIndex, getShowMatrix } from 'src/store/designSlice'
-import { getSelectedConnectedDevice, getSelectedKeyboardAPI } from 'src/store/devicesSlice'
+import { matrixKeycodes } from 'src/utils/key-event'
+import { useKeyboardRecord } from 'src/utils/use-keyboard-record'
+import fullKeyboardDefinition from '../../utils/test-keyboard-definition.json'
+import { VIAKey, DefinitionVersionMap } from '@the-via/reader'
 import { useAppDispatch, useAppSelector } from 'src/store/hooks'
+import { getSelectedKeyDefinitions, getSelectedDefinition, getCustomDefinitions } from 'src/store/definitionsSlice'
+import type { VIADefinitionV2, VIADefinitionV3 } from '@the-via/reader'
 import { getSelectedKeymap, getSelectedPaletteColor, setLayer } from 'src/store/keymapSlice'
-import { getShowKeyPainter } from 'src/store/menusSlice'
+import { KeyboardCanvas as StringKeyboardCanvas } from '../two-string/keyboard-canvas'
+import { KeyboardCanvas as FiberKeyboardCanvas } from '../three-fiber/keyboard-canvas'
+import { useLocation } from 'wouter'
+import { getSelectedConnectedDevice, getSelectedKeyboardAPI } from 'src/store/devicesSlice'
 import {
 	getDesignDefinitionVersion,
 	getIsTestMatrixEnabled,
 	getTestKeyboardSoundsSettings,
 	setTestMatrixEnabled,
 } from 'src/store/settingsSlice'
-import { DisplayMode, NDimension } from 'src/types/keyboard-rendering'
-import { TestKeyState } from 'src/types/types'
-import { matrixKeycodes } from 'src/utils/key-event'
-import { getKeyboardRowPartitions } from 'src/utils/keyboard-rendering'
-import { useColorPainter } from 'src/utils/use-color-painter'
+import { getDesignSelectedOptionKeys, getSelectedDefinitionIndex, getShowMatrix } from 'src/store/designSlice'
 import { useGlobalKeys } from 'src/utils/use-global-keys'
-import { useKeyboardRecord } from 'src/utils/use-keyboard-record'
 import { useMatrixTest } from 'src/utils/use-matrix-test'
-import { useLocation } from 'wouter'
-
-import fullKeyboardDefinition from '../../utils/test-keyboard-definition.json'
 import { TestContext } from '../panes/test'
-import { KeyboardCanvas as FiberKeyboardCanvas } from '../three-fiber/keyboard-canvas'
-import { KeyboardCanvas as StringKeyboardCanvas } from '../two-string/keyboard-canvas'
+import { TestKeyState } from 'src/types/types'
+import { useColorPainter } from 'src/utils/use-color-painter'
+import { getShowKeyPainter } from 'src/store/menusSlice'
+import { TestKeyboardSounds } from 'src/components/void/test-keyboard-sounds'
+import { DisplayMode, NDimension } from 'src/types/keyboard-rendering'
+import { getKeyboardRowPartitions } from 'src/utils/keyboard-rendering'
 
 const getKeyboardCanvas = (dimension: '2D' | '3D') => (dimension === '2D' ? StringKeyboardCanvas : FiberKeyboardCanvas)
 
-export const ConfigureKeyboard = (props: { dimensions?: DOMRect; nDimension: NDimension; selectable?: boolean }) => {
+export const ConfigureKeyboard = (props: { selectable?: boolean; dimensions?: DOMRect; nDimension: NDimension }) => {
 	const { selectable, dimensions } = props
 	const matrixKeycodes = useAppSelector((state) => getSelectedKeymap(state) || [])
-	const keys: ({ ei?: number } & VIAKey)[] = useAppSelector(getSelectedKeyDefinitions)
+	const keys: (VIAKey & { ei?: number })[] = useAppSelector(getSelectedKeyDefinitions)
 	const definition = useAppSelector(getSelectedDefinition)
 	const showKeyPainter = useAppSelector(getShowKeyPainter)
 	const selectedPaletteColor = useAppSelector(getSelectedPaletteColor)
@@ -85,13 +83,13 @@ export const ConfigureKeyboard = (props: { dimensions?: DOMRect; nDimension: NDi
 }
 
 const TestKeyboard = (props: {
-	containerDimensions?: DOMRect
-	definition: VIADefinitionV2 | VIADefinitionV3
-	keys: ({ ei?: number } & VIAKey)[]
-	matrixKeycodes: number[]
-	nDimension: NDimension
-	pressedKeys?: TestKeyState[]
 	selectable?: boolean
+	containerDimensions?: DOMRect
+	pressedKeys?: TestKeyState[]
+	matrixKeycodes: number[]
+	keys: (VIAKey & { ei?: number })[]
+	definition: VIADefinitionV2 | VIADefinitionV3
+	nDimension: NDimension
 }) => {
 	const { selectable, containerDimensions, matrixKeycodes, keys, pressedKeys, definition, nDimension } = props
 	if (!containerDimensions) {
@@ -114,9 +112,9 @@ const TestKeyboard = (props: {
 const DesignKeyboard = (props: {
 	containerDimensions?: DOMRect
 	definition: VIADefinitionV2 | VIADefinitionV3
-	nDimension: NDimension
-	selectedOptionKeys: number[]
 	showMatrix?: boolean
+	selectedOptionKeys: number[]
+	nDimension: NDimension
 }) => {
 	const { containerDimensions, showMatrix, definition, selectedOptionKeys } = props
 	const { keys, optionKeys } = definition.layouts
@@ -229,7 +227,7 @@ export const Test = (props: { dimensions?: DOMRect; nDimension: NDimension }) =>
 	const matrixPressedKeysMapped =
 		isTestMatrixEnabled && keyDefinitions
 			? keyDefinitions.map(
-					({ row, col }: { col: number; row: number }) =>
+					({ row, col }: { row: number; col: number }) =>
 						selectedDefinition &&
 						matrixPressedKeys[(row * selectedDefinition.matrix.cols + col) as keyof typeof matrixPressedKeys],
 				)
@@ -252,7 +250,7 @@ export const Test = (props: { dimensions?: DOMRect; nDimension: NDimension }) =>
 		: (globalPressedKeys as TestKeyState[])
 	const partitionedPressedKeys: TestKeyState[][] = partitionedKeys.map((rowArray) => {
 		return rowArray.map(
-			({ row, col }: { col: number; row: number }) =>
+			({ row, col }: { row: number; col: number }) =>
 				testPressedKeys2[(row * testDefinition.matrix.cols + col) as keyof typeof testPressedKeys2],
 		) as TestKeyState[]
 	})

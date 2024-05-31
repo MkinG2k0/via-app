@@ -1,23 +1,21 @@
-import type { VIAItem, VIAItemSlice, VIAMenu, VIASubmenu, VIASubmenuSlice } from '@the-via/reader'
-
-import { faDisplay, faHeadphones, faLightbulb, faMicrochip } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { evalExpr } from '@the-via/pelpi'
+import { faDisplay, faHeadphones, faLightbulb, faMicrochip } from '@fortawesome/free-solid-svg-icons'
 import React, { useState } from 'react'
-import { getSelectedDefinition } from 'src/store/definitionsSlice'
-import { useAppDispatch, useAppSelector } from 'src/store/hooks'
-import { getSelectedCustomMenuData, updateCustomMenuValue } from 'src/store/menusSlice'
 import styled from 'styled-components'
-
-import { component, title } from '../../../icons/lightbulb'
 import { OverflowCell, SubmenuCell, SubmenuRow } from '../../grid'
 import { CenterPane } from '../../pane'
+import { title, component } from '../../../icons/lightbulb'
 import { VIACustomItem } from './custom-control'
+import { evalExpr } from '@the-via/pelpi'
+import type { VIAMenu, VIASubmenu, VIASubmenuSlice, VIAItem, VIAItemSlice } from '@the-via/reader'
+import { useAppDispatch, useAppSelector } from 'src/store/hooks'
+import { getSelectedDefinition } from 'src/store/definitionsSlice'
+import { getSelectedCustomMenuData, updateCustomMenuValue } from 'src/store/menusSlice'
 
 type Category = {
+	label: string
 	// TODO: type this any
 	Menu: React.FC<any>
-	label: string
 }
 
 const CustomPane = styled(CenterPane)`
@@ -36,11 +34,11 @@ type Props = {
 	viaMenu: VIAMenu
 }
 
-function isItem(elem: VIAItem | VIAItemSlice | VIAMenu | VIASubmenu | VIASubmenuSlice): boolean {
+function isItem(elem: VIAMenu | VIAItem | VIAItemSlice | VIASubmenu | VIASubmenuSlice): boolean {
 	return 'type' in elem
 }
 
-function isSlice(elem: VIAItem | VIAItemSlice | VIAMenu | VIASubmenu | VIASubmenuSlice): boolean {
+function isSlice(elem: VIAMenu | VIAItem | VIAItemSlice | VIASubmenu | VIASubmenuSlice): boolean {
 	return !('label' in elem)
 }
 
@@ -137,20 +135,20 @@ export const Icon = component
 export const Title = title
 
 export type IdTag = { _id: string }
-export type MapIntoArr<A, C> = A extends (infer B)[] ? (B & C)[] : any
-export type IntersectKey<A, B extends keyof A, C> = {
+export type MapIntoArr<A, C> = A extends (infer B)[] ? (C & B)[] : any
+export type IntersectKey<A, B extends keyof A, C> = A & {
 	[K in B]: MapIntoArr<A[B], C>
-} & A
-export type TagWithId<A, B extends { content: any }> = (A & IdTag) | IntersectKey<B, 'content', IdTag>
+}
+export type TagWithId<A, B extends { content: any }> = (IdTag & A) | IntersectKey<B, 'content', IdTag>
 
 export const MenuContainer = styled.div`
 	padding: 15px 10px 20px 10px;
 `
 
 export type LabelProps = {
+	_type?: 'slice' | 'submenu' | 'menu'
 	_id?: string
 	_renderIf?: (props: any) => boolean
-	_type?: 'menu' | 'slice' | 'submenu'
 	content: any
 }
 

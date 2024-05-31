@@ -1,9 +1,8 @@
 import { createListenerMiddleware } from '@reduxjs/toolkit'
-import * as Sentry from '@sentry/react'
-import { DeviceInfo } from 'src/types/types'
-import { formatNumberAsHex } from 'src/utils/format'
-
 import { extractMessageFromKeyboardAPIError, logAppError, logKeyboardAPIError } from './errorsSlice'
+import * as Sentry from '@sentry/react'
+import { formatNumberAsHex } from 'src/utils/format'
+import { DeviceInfo } from 'src/types/types'
 
 export const errorsListenerMiddleware = createListenerMiddleware()
 

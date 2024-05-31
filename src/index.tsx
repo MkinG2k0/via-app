@@ -1,14 +1,13 @@
-import { ApplicationInsights } from '@microsoft/applicationinsights-web'
-import * as Sentry from '@sentry/react'
-import { BrowserTracing } from '@sentry/tracing'
 import '@webscopeio/react-textarea-autocomplete/style.css'
 import { createRoot } from 'react-dom/client'
-
-import './app.global.css'
 import Root from './containers/Root'
-import { updateCSSVariables } from './utils/color-math'
+import { ApplicationInsights } from '@microsoft/applicationinsights-web'
+import './app.global.css'
 import { getThemeModeFromStore, getThemeNameFromStore } from './utils/device-store'
+import { updateCSSVariables } from './utils/color-math'
 import { THEMES } from './utils/themes'
+import * as Sentry from '@sentry/react'
+import { BrowserTracing } from '@sentry/tracing'
 
 const { MODE } = import.meta.env
 

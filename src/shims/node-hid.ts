@@ -34,7 +34,7 @@ const tagDevice = (device: HIDDevice): WebVIADevice => {
 }
 
 // Attempt to forget device
-export const tryForgetDevice = (device: AuthorizedDevice | ConnectedDevice) => {
+export const tryForgetDevice = (device: ConnectedDevice | AuthorizedDevice) => {
 	const cachedDevice = ExtendedHID._cache[device.path]
 	if (cachedDevice) {
 		return cachedDevice._device.forget()
@@ -80,12 +80,11 @@ const ExtendedHID = {
 	HID: class HID {
 		_hidDevice?: WebVIADevice
 		interface: number = -1
-		openPromise: Promise<void> = Promise.resolve()
-		path: string = ''
+		vendorId: number = -1
 		productId: number = -1
 		productName: string = ''
-		readP = promisify((arg: any) => this.read(arg))
-		vendorId: number = -1
+		path: string = ''
+		openPromise: Promise<void> = Promise.resolve()
 		constructor(path: string) {
 			this._hidDevice = ExtendedHID._cache[path]
 			// TODO: seperate open attempt from constructor as it's async
@@ -106,20 +105,6 @@ const ExtendedHID = {
 				throw new Error('Missing hid device in cache')
 			}
 		}
-		// since time-travel is not possible yet...
-		fastForwardGlobalBuffer(time: number) {
-			let messagesLeft = globalBuffer[this.path].length
-			while (messagesLeft) {
-				messagesLeft--
-				// message in buffer happened before requested time
-				if (globalBuffer[this.path][0].currTime < time) {
-					globalBuffer[this.path].shift()
-				} else {
-					break
-				}
-			}
-		}
-
 		async open() {
 			if (this._hidDevice && !this._hidDevice._device.opened) {
 				this.openPromise = this._hidDevice._device.open()
@@ -128,18 +113,6 @@ const ExtendedHID = {
 			}
 			return Promise.resolve()
 		}
-
-		read(fn: (err?: Error, data?: ArrayBuffer) => void) {
-			this.fastForwardGlobalBuffer(Date.now())
-			if (globalBuffer[this.path].length > 0) {
-				// this should be a noop normally
-				fn(undefined, globalBuffer[this.path].shift()?.message as any)
-			} else {
-				eventWaitBuffer[this.path].push((data) => fn(undefined, data))
-			}
-		}
-
-		// The idea is discard any messages that have happened before the time a command was issued
 		// Should we unsubscribe at some point of time
 		setupListeners() {
 			if (this._hidDevice) {
@@ -156,6 +129,33 @@ const ExtendedHID = {
 						})
 					}
 				})
+			}
+		}
+
+		read(fn: (err?: Error, data?: ArrayBuffer) => void) {
+			this.fastForwardGlobalBuffer(Date.now())
+			if (globalBuffer[this.path].length > 0) {
+				// this should be a noop normally
+				fn(undefined, globalBuffer[this.path].shift()?.message as any)
+			} else {
+				eventWaitBuffer[this.path].push((data) => fn(undefined, data))
+			}
+		}
+
+		readP = promisify((arg: any) => this.read(arg))
+
+		// The idea is discard any messages that have happened before the time a command was issued
+		// since time-travel is not possible yet...
+		fastForwardGlobalBuffer(time: number) {
+			let messagesLeft = globalBuffer[this.path].length
+			while (messagesLeft) {
+				messagesLeft--
+				// message in buffer happened before requested time
+				if (globalBuffer[this.path][0].currTime < time) {
+					globalBuffer[this.path].shift()
+				} else {
+					break
+				}
 			}
 		}
 

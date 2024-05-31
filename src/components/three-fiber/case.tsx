@@ -7,10 +7,10 @@ import { useAppSelector } from 'src/store/hooks'
 import { getSelectedTheme } from 'src/store/settingsSlice'
 import { getDarkenedColor } from 'src/utils/color-math'
 import { KeycapMetric } from 'src/utils/keyboard-rendering'
-import { Path, Shape } from 'three'
+import { Shape, Path } from 'three'
 
 function makePlateShape(
-	{ width, height }: { height: number; width: number },
+	{ width, height }: { width: number; height: number },
 	keys: { position: number[]; rotation: number[]; scale: number[] }[],
 ) {
 	const shape = new Shape()
@@ -71,7 +71,7 @@ function makePlateShape(
 	return shape
 }
 
-function makeShape({ width, height }: { height: number; width: number }) {
+function makeShape({ width, height }: { width: number; height: number }) {
 	const shape = new Shape()
 
 	const sizeX = width
@@ -88,7 +88,7 @@ function makeShape({ width, height }: { height: number; width: number }) {
 	shape.absarc(halfX, -halfY, radius, baseAngle * 3, baseAngle * 3 + baseAngle, false)
 	return shape
 }
-const SimplePlate: React.FC<{ height: number; width: number }> = ({ width, height }) => {
+const SimplePlate: React.FC<{ width: number; height: number }> = ({ width, height }) => {
 	const depthOffset = 0.5
 	const heightOffset = 0.5
 	const definition = useAppSelector(getSelectedDefinition)
@@ -120,7 +120,7 @@ const SimplePlate: React.FC<{ height: number; width: number }> = ({ width, heigh
 	)
 }
 
-const Heart = React.memo((props: { caseHeight: number; caseWidth: number; color: string }) => {
+const Heart = React.memo((props: { caseWidth: number; caseHeight: number; color: string }) => {
 	const heartAngle = Math.atan(2 / props.caseWidth)
 
 	const midXOffset = (80 + -30) / 2
@@ -226,7 +226,7 @@ const makeShape2 = (layoutHeight: number) => {
 	return path
 }
 
-export const Case = React.memo((props: { height: number; width: number }) => {
+export const Case = React.memo((props: { width: number; height: number }) => {
 	const theme = useAppSelector(getSelectedTheme)
 	const outsideColor = useMemo(() => theme[KeyColorType.Accent].c, [theme])
 	const innerColor = '#212020'

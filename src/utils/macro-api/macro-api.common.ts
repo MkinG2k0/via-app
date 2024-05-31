@@ -8,22 +8,22 @@ import {
 } from './types'
 
 export type ValidationResult = {
-	errorMessage?: string
 	isValid: boolean
+	errorMessage?: string
 }
 
 export interface IMacroAPI {
-	rawKeycodeSequencesToMacroBytes(sequences: RawKeycodeSequence[]): number[]
 	readRawKeycodeSequences(): Promise<RawKeycodeSequence[]>
 	writeRawKeycodeSequences(sequences: RawKeycodeSequence[]): void
+	rawKeycodeSequencesToMacroBytes(sequences: RawKeycodeSequence[]): number[]
 }
 
 // Corresponds to 'magic codes' in qmk sendstring
 export enum KeyAction {
-	Delay = 4, // \x04
-	Down = 2, // \x02
 	Tap = 1, // \x01
+	Down = 2, // \x02
 	Up = 3, // \x03
+	Delay = 4, // \x04
 }
 
 export const KeyActionPrefix = 1 // \x01

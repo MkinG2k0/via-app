@@ -1,18 +1,16 @@
-import { PayloadAction, createSelector, createSlice } from '@reduxjs/toolkit'
-import { KeyboardAPI } from 'src/utils/keyboard-api'
-
+import { createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit'
 import type { ConnectedDevice, DeviceLayerMap, Keymap, Layer } from '../types/types'
 import type { AppThunk, RootState } from './index'
-
 import { getDefinitions, getSelectedDefinition, getSelectedKeyDefinitions } from './definitionsSlice'
 import { getSelectedConnectedDevice, getSelectedDevicePath, getSelectedKeyboardAPI, selectDevice } from './devicesSlice'
+import { KeyboardAPI } from 'src/utils/keyboard-api'
 
 type KeymapState = {
-	configureKeyboardIsSelectable: boolean
-	numberOfLayers: number
 	rawDeviceMap: DeviceLayerMap
-	selectedKey: null | number
+	numberOfLayers: number
 	selectedLayerIndex: number
+	selectedKey: number | null
+	configureKeyboardIsSelectable: boolean
 	selectedPaletteColor: [number, number]
 }
 
@@ -42,9 +40,9 @@ const keymapSlice = createSlice({
 		loadLayerSuccess: (
 			state,
 			action: PayloadAction<{
-				devicePath: string
-				keymap: Keymap
 				layerIndex: number
+				keymap: Keymap
+				devicePath: string
 			}>,
 		) => {
 			const { layerIndex, keymap, devicePath } = action.payload
@@ -65,10 +63,10 @@ const keymapSlice = createSlice({
 		clearSelectedKey: (state) => {
 			state.selectedKey = null
 		},
-		updateSelectedKey: (state, action: PayloadAction<null | number>) => {
+		updateSelectedKey: (state, action: PayloadAction<number | null>) => {
 			state.selectedKey = action.payload
 		},
-		saveKeymapSuccess: (state, action: PayloadAction<{ devicePath: string; layers: Layer[] }>) => {
+		saveKeymapSuccess: (state, action: PayloadAction<{ layers: Layer[]; devicePath: string }>) => {
 			const { layers, devicePath } = action.payload
 			state.rawDeviceMap[devicePath] = layers
 		},

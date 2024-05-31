@@ -1,18 +1,15 @@
-import type { VIADefinitionV2, VIADefinitionV3 } from '@the-via/reader'
-
-import { faAngleDown, faPlus } from '@fortawesome/free-solid-svg-icons'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import React, { useMemo, useState } from 'react'
+import styled from 'styled-components'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faAngleDown, faPlus } from '@fortawesome/free-solid-svg-icons'
+import { HID } from '../../../shims/node-hid'
+import type { VIADefinitionV2, VIADefinitionV3 } from '@the-via/reader'
+import type { ConnectedDevice } from '../../../types/types'
+import { useAppDispatch, useAppSelector } from 'src/store/hooks'
 import { getDefinitions, getSelectedDefinition } from 'src/store/definitionsSlice'
 import { getConnectedDevices, getSelectedDevicePath } from 'src/store/devicesSlice'
 import { selectConnectedDeviceByPath } from 'src/store/devicesThunks'
-import { useAppDispatch, useAppSelector } from 'src/store/hooks'
 import { isElectron } from 'src/utils/running-context'
-import styled from 'styled-components'
-
-import type { ConnectedDevice } from '../../../types/types'
-
-import { HID } from '../../../shims/node-hid'
 
 const Container = styled.div`
 	position: absolute;
@@ -98,11 +95,11 @@ const ClickCover = styled.div`
 type ConnectedKeyboardDefinition = [string, VIADefinitionV2 | VIADefinitionV3]
 
 const KeyboardSelectors: React.FC<{
+	show: boolean
 	keyboards: ConnectedKeyboardDefinition[]
+	selectedPath: string
 	onClickOut: () => void
 	selectKeyboard: (kb: string) => void
-	selectedPath: string
-	show: boolean
 }> = (props) => {
 	const requestAndChangeDevice = async () => {
 		const device = await HID.requestDevice()
@@ -179,11 +176,11 @@ export const Badge = () => {
 				<KeyboardSelectors
 					keyboards={connectedKeyboardDefinitions}
 					onClickOut={() => setShowList(false)}
+					selectedPath={selectedPath}
 					selectKeyboard={(path) => {
 						dispatch(selectConnectedDeviceByPath(path))
 						setShowList(false)
 					}}
-					selectedPath={selectedPath}
 					show={showList}
 				/>
 			</Container>

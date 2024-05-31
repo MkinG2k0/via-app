@@ -1,30 +1,29 @@
+import { advancedKeycodeToString, advancedStringToKeycode } from './advanced-keys'
 import {
 	BuiltInKeycodeModule,
-	KeycodeType,
-	VIADefinitionV2,
 	VIADefinitionV3,
+	VIADefinitionV2,
 	getLightingDefinition,
+	KeycodeType,
 } from '@the-via/reader'
 
-import { advancedKeycodeToString, advancedStringToKeycode } from './advanced-keys'
-
 export interface IKeycode {
-	code: string
-	keys?: string
-	layer?: number
 	name: string
-	shortName?: string
+	code: string
 	title?: string
-	type?: 'container' | 'layer' | 'text'
+	shortName?: string
+	keys?: string
 	width?: number
+	type?: 'container' | 'text' | 'layer'
+	layer?: number
 }
 
 export interface IKeycodeMenu {
-	detailed?: string
 	id: string
-	keycodes: IKeycode[]
 	label: string
+	keycodes: IKeycode[]
 	width?: 'label'
+	detailed?: string
 }
 
 // Tests if label is an alpha
@@ -894,14 +893,14 @@ export function getKeycodes(numMacros = 16): IKeycodeMenu[] {
 	]
 }
 
-export const categoriesForKeycodeModule = (keycodeModule: 'default' | BuiltInKeycodeModule) =>
+export const categoriesForKeycodeModule = (keycodeModule: BuiltInKeycodeModule | 'default') =>
 	({
 		default: ['basic', 'media', 'macro', 'layers', 'special'],
 		[BuiltInKeycodeModule.WTLighting]: ['wt_lighting'],
 		[BuiltInKeycodeModule.QMKLighting]: ['qmk_lighting'],
 	})[keycodeModule]
 
-export const getKeycodesForKeyboard = (definition: VIADefinitionV2 | VIADefinitionV3) => {
+export const getKeycodesForKeyboard = (definition: VIADefinitionV3 | VIADefinitionV2) => {
 	// v2
 	let includeList: string[] = []
 	if ('lighting' in definition) {

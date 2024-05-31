@@ -1,18 +1,16 @@
-import type { VIADefinitionV2, VIADefinitionV3 } from '@the-via/reader'
-
 import React from 'react'
-import { useDispatch } from 'react-redux'
-import { getDesignSelectedOptionKeys, updateSelectedOptionKeys } from 'src/store/designSlice'
-import { useAppSelector } from 'src/store/hooks'
-
 import { AccentSelect } from './inputs/accent-select'
 import { AccentSlider } from './inputs/accent-slider'
 import { Detail, IndentedControlRow, Label } from './panes/grid'
+import type { VIADefinitionV2, VIADefinitionV3 } from '@the-via/reader'
+import { useAppSelector } from 'src/store/hooks'
+import { getDesignSelectedOptionKeys, updateSelectedOptionKeys } from 'src/store/designSlice'
+import { useDispatch } from 'react-redux'
 
 interface Props {
-	RowComponent?: React.JSXElementConstructor<any>
 	definition: VIADefinitionV2 | VIADefinitionV3
 	onLayoutChange: (newSelectedOptionKeys: number[]) => void
+	RowComponent?: React.JSXElementConstructor<any>
 }
 
 function Layouts({ definition, onLayoutChange, RowComponent = IndentedControlRow }: Props): JSX.Element | null {

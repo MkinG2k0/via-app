@@ -1,29 +1,28 @@
-import { useProgress } from '@react-three/drei'
-import { DefinitionVersionMap, KeyColorType } from '@the-via/reader'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import React from 'react'
-import { shallowEqual } from 'react-redux'
 import { getCustomDefinitions, getSelectedDefinition } from 'src/store/definitionsSlice'
+import { useSize } from 'src/utils/use-size'
+import { useLocation } from 'wouter'
+import { ConfigureKeyboard, Design, Test } from '../n-links/keyboard'
 import { useAppDispatch, useAppSelector } from 'src/store/hooks'
+import { useProgress } from '@react-three/drei'
 import {
-	clearSelectedKey,
-	getConfigureKeyboardIsSelectable,
 	getLoadProgress,
 	updateSelectedKey,
+	getConfigureKeyboardIsSelectable,
+	clearSelectedKey,
 } from 'src/store/keymapSlice'
+import React from 'react'
+import { shallowEqual } from 'react-redux'
+import { DefinitionVersionMap, KeyColorType } from '@the-via/reader'
 import { getDesignDefinitionVersion, getSelectedTheme } from 'src/store/settingsSlice'
-import { getDarkenedColor } from 'src/utils/color-math'
 import { OVERRIDE_HID_CHECK } from 'src/utils/override'
-import { useSize } from 'src/utils/use-size'
 import styled from 'styled-components'
-import { useLocation } from 'wouter'
-
-import { ConfigureKeyboard, Design, Test } from '../n-links/keyboard'
+import { getDarkenedColor } from 'src/utils/color-math'
 
 const KeyboardBG = styled.div<{
+	onClick: () => void
 	$color: string
 	$visible: boolean
-	onClick: () => void
 }>`
 	position: absolute;
 	top: 0;
@@ -77,7 +76,7 @@ export const CanvasRouter = () => {
 	}, [dispatch])
 	const showAuthorizeButton = 'hid' in navigator || OVERRIDE_HID_CHECK
 	const hideCanvasScene =
-		!showAuthorizeButton || ['/errors', '/settings'].includes(path) || hideDesignScene || hideConfigureScene
+		!showAuthorizeButton || ['/settings', '/errors'].includes(path) || hideDesignScene || hideConfigureScene
 	const configureKeyboardIsSelectable = useAppSelector(getConfigureKeyboardIsSelectable)
 	const hideTerrainBG = showLoader
 

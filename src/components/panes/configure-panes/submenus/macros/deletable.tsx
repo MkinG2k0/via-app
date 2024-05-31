@@ -26,9 +26,9 @@ const DeletableContainer = styled.div`
 
 export const Deletable: React.FC<
 	PropsWithChildren<{
-		deleteItem: (index: number) => void
-		disabled: boolean
 		index: number
+		disabled: boolean
+		deleteItem: (index: number) => void
 	}>
 > = (props) => {
 	return (

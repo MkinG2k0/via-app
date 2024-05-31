@@ -1,9 +1,9 @@
-import imgSrc from 'assets/images/chippy_600.png'
-import { useAppSelector } from 'src/store/hooks'
-import { getSelectedTheme } from 'src/store/settingsSlice'
-import { getDarkenedColor } from 'src/utils/color-math'
-import { Theme } from 'src/utils/themes'
 import styled from 'styled-components'
+import imgSrc from 'assets/images/chippy_600.png'
+import { Theme } from 'src/utils/themes'
+import { getDarkenedColor } from 'src/utils/color-math'
+import { getSelectedTheme } from 'src/store/settingsSlice'
+import { useAppSelector } from 'src/store/hooks'
 
 const defaultChippy = {
 	width: 300,
@@ -21,7 +21,7 @@ const LoaderContainer = styled.div`
 const CircleContainer = styled.div<{
 	$containerHeight: number
 	$containerWidth: number
-	$progress: null | number
+	$progress: number | null
 	$progressColor: string
 }>`
 	border-radius: 50%;
@@ -56,13 +56,13 @@ const CircleContainer = styled.div<{
 `
 
 type Props = {
-	height?: number
-	progress: null | number
-	theme: Theme
+	progress: number | null
 	width?: number
+	height?: number
+	theme: Theme
 }
 
-const SvgComponent: React.FC<{ theme: Theme } & any> = (props) => {
+const SvgComponent: React.FC<any & { theme: Theme }> = (props) => {
 	const { theme } = props
 
 	const darkAccent = getDarkenedColor(theme.accent.c, 0.8)
@@ -82,8 +82,8 @@ const SvgComponent: React.FC<{ theme: Theme } & any> = (props) => {
 			}}
 			viewBox={'0 0 600 600'}
 			x={0}
-			xmlSpace={'preserve'}
 			xmlns={'http://www.w3.org/2000/svg'}
+			xmlSpace={'preserve'}
 			y={0}
 			{...props}
 		>

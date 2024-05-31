@@ -1,5 +1,5 @@
-import useResizeObserver from '@react-hook/resize-observer'
 import * as React from 'react'
+import useResizeObserver from '@react-hook/resize-observer'
 
 export const useSize = (target: React.MutableRefObject<HTMLElement | null>) => {
 	const [size, setSize] = React.useState<DOMRect>()

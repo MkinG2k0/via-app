@@ -1,17 +1,15 @@
-import type { FC } from 'react'
-
-import { getLightingDefinition, isVIADefinitionV2 } from '@the-via/reader'
 import { useState } from 'react'
-import { getSelectedDefinition } from 'src/store/definitionsSlice'
-import { useAppSelector } from 'src/store/hooks'
 import styled from 'styled-components'
-
-import { component, title } from '../../icons/lightbulb'
 import { OverflowCell, SubmenuCell, SubmenuRow } from '../grid'
 import { CenterPane } from '../pane'
-import { AdvancedLightingValues, AdvancedPane } from './submenus/lighting/advanced'
+import { title, component } from '../../icons/lightbulb'
 import { GeneralPane } from './submenus/lighting/general'
 import { LayoutConfigValues, Pane as LayoutPane } from './submenus/lighting/layout'
+import { AdvancedLightingValues, AdvancedPane } from './submenus/lighting/advanced'
+import { getLightingDefinition, isVIADefinitionV2 } from '@the-via/reader'
+import { useAppSelector } from 'src/store/hooks'
+import { getSelectedDefinition } from 'src/store/definitionsSlice'
+import type { FC } from 'react'
 
 export const Category = {
 	General: { label: 'General', Menu: GeneralPane },

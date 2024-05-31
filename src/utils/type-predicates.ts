@@ -1,7 +1,7 @@
 import { KeyboardDictionary } from '@the-via/reader'
 import { AuthorizedDevice, ConnectedDevice } from 'src/types/types'
 
-export function isNotNullish<A>(a: A | null | undefined): a is A {
+export function isNotNullish<A>(a: A | undefined | null): a is A {
 	return a !== undefined && a !== null
 }
 

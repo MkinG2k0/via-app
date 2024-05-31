@@ -1,21 +1,20 @@
-import { Result, ThemeDefinition, VIADefinitionV2, VIADefinitionV3, VIAKey, getBoundingBox } from '@the-via/reader'
+import { getBoundingBox, Result, ThemeDefinition, VIADefinitionV2, VIADefinitionV3, VIAKey } from '@the-via/reader'
 import partition from 'lodash.partition'
 import { Color } from 'three'
-
 import { getThemeFromStore } from './device-store'
 import {
-	IKeycode,
-	getCustomKeycodeIndex,
 	getLabelForByte,
-	getMacroKeycodeIndex,
 	getShortNameForKeycode,
+	getCustomKeycodeIndex,
+	IKeycode,
 	isAlpha,
-	isArrowKey,
-	isCustomKeycodeByte,
-	isMacroKeycodeByte,
-	isMultiLegend,
 	isNumpadNumber,
 	isNumpadSymbol,
+	isMultiLegend,
+	isCustomKeycodeByte,
+	isArrowKey,
+	isMacroKeycodeByte,
+	getMacroKeycodeIndex,
 } from './key'
 
 export const CSSVarObject = {
@@ -43,7 +42,7 @@ export const getComboKeyProps = (
 	k: VIAKey,
 ): {
 	clipPath: null | string
-	normalizedRects: [[number, number, number, number], [number, number, number, number]] | null
+	normalizedRects: null | [[number, number, number, number], [number, number, number, number]]
 } => {
 	if (k.w2 === undefined || k.h2 === undefined) {
 		return { clipPath: null, normalizedRects: null }
@@ -225,8 +224,8 @@ export const getKeyId = (k: VIAKey) => {
 export const getKeyboardRowPartitions = (
 	keys: VIAKey[],
 ): {
-	partitionedKeys: VIAKey[][]
 	rowMap: { [id: string]: number }
+	partitionedKeys: VIAKey[][]
 } => {
 	const { partitionedKeys } = getTraversalOrder(keys).reduce(
 		({ prevX, partitionedKeys }, k) => {
@@ -254,7 +253,7 @@ export const getKeyboardRowPartitions = (
 }
 
 // TODO: This code is shared across components, move to shared module?
-export const getNextKey = (currIndex: number, keys: VIAKey[]): null | number => {
+export const getNextKey = (currIndex: number, keys: VIAKey[]): number | null => {
 	const displayedKeys = keys.filter((k) => !k.d)
 	const currKey = keys[currIndex]
 	const sortedKeys = getTraversalOrder([...displayedKeys])

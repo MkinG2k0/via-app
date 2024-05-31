@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
-
 import { getKeycodes } from './key'
 import { mapEvtToKeycode } from './key-event'
 import { RawKeycodeSequence, RawKeycodeSequenceAction } from './macro-api/types'

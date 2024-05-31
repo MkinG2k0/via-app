@@ -44,11 +44,11 @@ function midiNoteToFrequency(midiNote: number): number {
 }
 
 export class Note {
+	audioContext: AudioContext
+	osc: OscillatorNode
 	amp: GainNode
 	ampSustainTime: number
-	audioContext: AudioContext
 	midiNote: number
-	osc: OscillatorNode
 	constructor(midiNote: number, oscillatorType: OscillatorType) {
 		this.midiNote = midiNote
 		this.audioContext = getAudioContext()
@@ -63,6 +63,14 @@ export class Note {
 		this.osc.connect(this.amp)
 	}
 
+	noteOn(): void {
+		const startTime = this.audioContext.currentTime
+		this.osc.start(startTime)
+		this.ampSustainTime = startTime + ampAttack + ampDecay
+		this.amp.gain.linearRampToValueAtTime(ampGain, startTime + ampAttack)
+		this.amp.gain.linearRampToValueAtTime(ampGain * ampSustain, this.ampSustainTime)
+	}
+
 	noteOff(): void {
 		// This fixes a click sound if the gain ramp to 0 happens
 		// in the middle of sustain, i.e. after the previous
@@ -73,13 +81,5 @@ export class Note {
 		const stopTime = Math.max(this.audioContext.currentTime, this.ampSustainTime) + ampRelease
 		this.osc.stop(stopTime)
 		this.amp.gain.linearRampToValueAtTime(0, stopTime)
-	}
-
-	noteOn(): void {
-		const startTime = this.audioContext.currentTime
-		this.osc.start(startTime)
-		this.ampSustainTime = startTime + ampAttack + ampDecay
-		this.amp.gain.linearRampToValueAtTime(ampGain, startTime + ampAttack)
-		this.amp.gain.linearRampToValueAtTime(ampGain * ampSustain, this.ampSustainTime)
 	}
 }

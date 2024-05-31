@@ -5,7 +5,6 @@ import type {
 	LightingValue,
 	VIAMenu,
 } from '@the-via/reader'
-
 import { TestKeyboardSoundsMode } from 'src/components/void/test-keyboard-sounds'
 
 export enum TestKeyState {
@@ -19,51 +18,51 @@ export type HIDColor = {
 	sat: number
 }
 
-export type LightingData = {
+export type LightingData = Partial<{ [key in LightingValue]: number[] }> & {
 	customColors?: HIDColor[]
-} & Partial<{ [key in LightingValue]: number[] }>
+}
 
 export type DeviceInfo = {
+	vendorId: number
 	productId: number
 	productName: string
 	protocol?: number
-	vendorId: number
 }
 
-export type Device = {
-	interface: number
+export type Device = DeviceInfo & {
 	path: string
 	productName: string
-} & DeviceInfo
+	interface: number
+}
 
 export type Keymap = number[]
 export type Layer = {
-	isLoaded: boolean
 	keymap: Keymap
+	isLoaded: boolean
 }
 
 export type DeviceLayerMap = { [devicePath: string]: Layer[] }
 
-export type WebVIADevice = {
+export type WebVIADevice = Device & {
 	_device: HIDDevice
-} & Device
+}
 
 // Refers to a device that may or may not have an associated definition but does have a valid protocol version
-export type AuthorizedDevice = {
+export type AuthorizedDevice = DeviceInfo & {
+	path: string
+	vendorProductId: number
+	protocol: number
+	requiredDefinitionVersion: DefinitionVersion
 	hasResolvedDefinition: false
-	path: string
-	protocol: number
-	requiredDefinitionVersion: DefinitionVersion
-	vendorProductId: number
-} & DeviceInfo
+}
 
-export type ConnectedDevice = {
-	hasResolvedDefinition: true
+export type ConnectedDevice = DeviceInfo & {
 	path: string
+	vendorProductId: number
 	protocol: number
 	requiredDefinitionVersion: DefinitionVersion
-	vendorProductId: number
-} & DeviceInfo
+	hasResolvedDefinition: true
+}
 
 export type AuthorizedDevices = Record<string, AuthorizedDevice>
 export type ConnectedDevices = Record<string, ConnectedDevice>
@@ -76,22 +75,22 @@ export type MacroEditorSettings = {
 
 export type TestKeyboardSoundsSettings = {
 	isEnabled: boolean
-	mode: TestKeyboardSoundsMode
-	transpose: number
 	volume: number
 	waveform: OscillatorType
+	mode: TestKeyboardSoundsMode
+	transpose: number
 }
 
 export type Settings = {
-	designDefinitionVersion: DefinitionVersion
+	showDesignTab: boolean
 	disableFastRemap: boolean
 	disableRecordKeyboard: boolean
-	macroEditor: MacroEditorSettings
-	renderMode: '2D' | '3D'
-	showDesignTab: boolean
-	testKeyboardSoundsSettings: TestKeyboardSoundsSettings
-	themeMode: 'dark' | 'light'
+	renderMode: '3D' | '2D'
+	themeMode: 'light' | 'dark'
 	themeName: string
+	macroEditor: MacroEditorSettings
+	testKeyboardSoundsSettings: TestKeyboardSoundsSettings
+	designDefinitionVersion: DefinitionVersion
 }
 
 export type CommonMenusMap = {
@@ -106,9 +105,9 @@ export type StoreData = {
 
 export type VendorProductIdMap = Record<number, { v2: boolean; v3: boolean }>
 
-export type DefinitionIndex = {
-	hash: string
+export type DefinitionIndex = Pick<KeyboardDefinitionIndex, 'generatedAt' | 'version' | 'theme'> & {
 	supportedVendorProductIdMap: VendorProductIdMap
-} & Pick<KeyboardDefinitionIndex, 'generatedAt' | 'theme' | 'version'>
+	hash: string
+}
 
 export type EncoderBehavior = [number, number, number]

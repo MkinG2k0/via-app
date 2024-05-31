@@ -145,9 +145,9 @@ export const NumberInput = styled.input.attrs({
 `
 
 export const WaitInput: React.FC<{
+	value: number | string
 	index: number
 	updateValue: (id: number, wait: number) => void
-	value: number | string
 }> = (props) => {
 	const inputRef = useRef(null)
 	const onBeforeInput = (evt: InputEvent) => {

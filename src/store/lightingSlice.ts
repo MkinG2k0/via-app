@@ -1,12 +1,10 @@
-import { PayloadAction, createSelector, createSlice } from '@reduxjs/toolkit'
-import { LightingValue, getLightingDefinition, isVIADefinitionV2 } from '@the-via/reader'
-import { KeyboardAPI } from 'src/utils/keyboard-api'
-
+import { createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit'
 import type { ConnectedDevice, LightingData } from '../types/types'
+import { getLightingDefinition, isVIADefinitionV2, LightingValue } from '@the-via/reader'
 import type { AppThunk, RootState } from './index'
-
 import { getSelectedDefinition } from './definitionsSlice'
 import { getSelectedConnectedDevice, getSelectedDevicePath, getSelectedKeyboardAPI } from './devicesSlice'
+import { KeyboardAPI } from 'src/utils/keyboard-api'
 
 type LightingMap = { [devicePath: string]: LightingData }
 
@@ -44,7 +42,7 @@ const lightingSlice = createSlice({
 	name: 'lighting',
 	initialState,
 	reducers: {
-		updateSelectedLightingData: (state, action: PayloadAction<{ devicePath: string; lightingData: LightingData }>) => {
+		updateSelectedLightingData: (state, action: PayloadAction<{ lightingData: LightingData; devicePath: string }>) => {
 			const { lightingData, devicePath } = action.payload
 			state.lightingMap[devicePath] = lightingData
 		},

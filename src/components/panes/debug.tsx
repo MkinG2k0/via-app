@@ -1,29 +1,27 @@
-import type { VIADefinitionV2, VIADefinitionV3 } from '@the-via/reader'
-
-import { FC, useState } from 'react'
-import { useDispatch } from 'react-redux'
-import { getBaseDefinitions, getBasicKeyToByte, getCustomDefinitions, getDefinitions } from 'src/store/definitionsSlice'
-import { getConnectedDevices, getSelectedKeyboardAPI } from 'src/store/devicesSlice'
-import { useAppSelector } from 'src/store/hooks'
-import { getSelected256PaletteColor, setSelectedPaletteColor } from 'src/store/keymapSlice'
-import { getNextKey } from 'src/utils/keyboard-rendering'
-import { RawKeycodeSequenceAction } from 'src/utils/macro-api/types'
+import { useState, FC } from 'react'
+import { Pane } from './pane'
 import styled from 'styled-components'
-
-import { anyKeycodeToString } from '../../utils/advanced-keys'
 import { KeyboardValue } from '../../utils/keyboard-api'
-import Layouts from '../Layouts'
-import { AccentButton } from '../inputs/accent-button'
-import { AccentRange } from '../inputs/accent-range'
+import { anyKeycodeToString } from '../../utils/advanced-keys'
 import { AccentSelect } from '../inputs/accent-select'
+import { AccentButton } from '../inputs/accent-button'
 import { AccentSlider } from '../inputs/accent-slider'
-import { ColorPalettePicker } from '../inputs/color-palette-picker'
 import { ArrayColorPicker } from '../inputs/color-picker'
 import { PelpiKeycodeInput } from '../inputs/pelpi/keycode-input'
+import { ControlRow, Label, SubLabel, Detail, IndentedControlRow, OverflowCell } from './grid'
+import Layouts from '../Layouts'
+import type { VIADefinitionV2, VIADefinitionV3 } from '@the-via/reader'
+import { AccentRange } from '../inputs/accent-range'
+import { useAppSelector } from 'src/store/hooks'
+import { getConnectedDevices, getSelectedKeyboardAPI } from 'src/store/devicesSlice'
+import { getBaseDefinitions, getDefinitions, getCustomDefinitions, getBasicKeyToByte } from 'src/store/definitionsSlice'
 import TextInput from '../inputs/text-input'
+import { getNextKey } from 'src/utils/keyboard-rendering'
+import { ColorPalettePicker } from '../inputs/color-palette-picker'
+import { useDispatch } from 'react-redux'
+import { getSelected256PaletteColor, setSelectedPaletteColor } from 'src/store/keymapSlice'
 import { MacroRecorder } from './configure-panes/submenus/macros/macro-recorder'
-import { ControlRow, Detail, IndentedControlRow, Label, OverflowCell, SubLabel } from './grid'
-import { Pane } from './pane'
+import { RawKeycodeSequenceAction } from 'src/utils/macro-api/types'
 
 // TODO: should we differentiate between firwmare versions in the UI?
 type KeyboardDefinitionEntry = [string, VIADefinitionV2 | VIADefinitionV3]
@@ -218,7 +216,7 @@ export const Debug: FC = () => {
 
 	const [selectedDefinitionIndex, setSelectedDefinition] = useState(0)
 	const [selectedOptionKeys, setSelectedOptionKeys] = useState<number[]>([])
-	const [selectedKey, setSelectedKey] = useState<number | undefined>(0)
+	const [selectedKey, setSelectedKey] = useState<undefined | number>(0)
 	const [showMatrix, setShowMatrix] = useState(false)
 
 	const options = allDefinitions.map(([, definition], index) => ({

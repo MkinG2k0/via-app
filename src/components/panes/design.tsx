@@ -1,20 +1,42 @@
-import type { DefinitionVersion } from '@the-via/reader'
-
-import { faBook, faUpload, faXmark } from '@fortawesome/free-solid-svg-icons'
+import { useState, FC, useRef, Dispatch, DragEvent, useMemo } from 'react'
+import { Pane } from './pane'
+import styled from 'styled-components'
+import { ErrorMessage } from '../styled'
+import { AccentSelect } from '../inputs/accent-select'
+import { AccentSlider } from '../inputs/accent-slider'
+import { AccentUploadButton } from '../inputs/accent-upload-button'
+import Layouts from '../Layouts'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faBook, faUpload, faXmark } from '@fortawesome/free-solid-svg-icons'
 import {
+	keyboardDefinitionV2ToVIADefinitionV2,
+	isVIADefinitionV2,
+	isKeyboardDefinitionV2,
+	keyboardDefinitionV3ToVIADefinitionV3,
+	isVIADefinitionV3,
+	isKeyboardDefinitionV3,
 	DefinitionVersionMap,
 	VIADefinitionV2,
 	VIADefinitionV3,
-	isKeyboardDefinitionV2,
-	isKeyboardDefinitionV3,
-	isVIADefinitionV2,
-	isVIADefinitionV3,
-	keyboardDefinitionV2ToVIADefinitionV2,
-	keyboardDefinitionV3ToVIADefinitionV3,
 } from '@the-via/reader'
-import { Dispatch, DragEvent, FC, useMemo, useRef, useState } from 'react'
+import type { DefinitionVersion } from '@the-via/reader'
+import {
+	ControlRow,
+	Label,
+	SubLabel,
+	Detail,
+	IndentedControlRow,
+	SinglePaneFlexCell,
+	Grid,
+	SpanOverflowCell,
+	MenuCell,
+	Row,
+	IconContainer,
+} from './grid'
 import { useDispatch } from 'react-redux'
+import { selectDevice, ensureSupportedIds } from 'src/store/devicesSlice'
+import { reloadConnectedDevices } from 'src/store/devicesThunks'
+import { useAppSelector } from 'src/store/hooks'
 import {
 	getCustomDefinitions,
 	loadCustomDefinitions,
@@ -28,36 +50,12 @@ import {
 	updateSelectedOptionKeys,
 	updateShowMatrix,
 } from 'src/store/designSlice'
-import { ensureSupportedIds, selectDevice } from 'src/store/devicesSlice'
-import { reloadConnectedDevices } from 'src/store/devicesThunks'
-import { useAppSelector } from 'src/store/hooks'
-import { getDesignDefinitionVersion, updateDesignDefinitionVersion } from 'src/store/settingsSlice'
-import { formatNumberAsHex } from 'src/utils/format'
-import styled from 'styled-components'
-
-import Layouts from '../Layouts'
-import { AccentSelect } from '../inputs/accent-select'
-import { AccentSlider } from '../inputs/accent-slider'
-import { AccentUploadButton } from '../inputs/accent-upload-button'
-import { IconButtonUnfilledContainer } from '../inputs/icon-button'
-import { MessageDialog } from '../inputs/message-dialog'
-import { MenuTooltip } from '../inputs/tooltip'
-import { ErrorMessage } from '../styled'
 import { MenuContainer } from './configure-panes/custom/menu-generator'
-import {
-	ControlRow,
-	Detail,
-	Grid,
-	IconContainer,
-	IndentedControlRow,
-	Label,
-	MenuCell,
-	Row,
-	SinglePaneFlexCell,
-	SpanOverflowCell,
-	SubLabel,
-} from './grid'
-import { Pane } from './pane'
+import { MenuTooltip } from '../inputs/tooltip'
+import { MessageDialog } from '../inputs/message-dialog'
+import { IconButtonUnfilledContainer } from '../inputs/icon-button'
+import { formatNumberAsHex } from 'src/utils/format'
+import { getDesignDefinitionVersion, updateDesignDefinitionVersion } from 'src/store/settingsSlice'
 
 let designWarningSeen = Number(localStorage.getItem('designWarningSeen') || 0)
 let hideDesignWarning = sessionStorage.getItem('hideDesignWarning') || designWarningSeen > 4

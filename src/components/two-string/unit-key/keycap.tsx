@@ -1,17 +1,16 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { shallowEqual } from 'react-redux'
-import { DisplayMode, KeycapState, TwoStringKeycapProps } from 'src/types/keyboard-rendering'
 import { TestKeyState } from 'src/types/types'
 import { getDarkenedColor } from 'src/utils/color-math'
 import { CSSVarObject } from 'src/utils/keyboard-rendering'
 import styled from 'styled-components'
-
 import { Keycap2DTooltip } from '../../inputs/tooltip'
 import { ComboKeycap } from './combo-keycap'
 import { EncoderKey } from './encoder'
 import { CanvasContainer, KeycapContainer, TestOverlay, TooltipContainer } from './keycap-base'
+import { KeycapState, TwoStringKeycapProps, DisplayMode } from 'src/types/keyboard-rendering'
 
-const getMacroData = ({ macroExpression, label }: { label: string; macroExpression?: string }) =>
+const getMacroData = ({ macroExpression, label }: { macroExpression?: string; label: string }) =>
 	label && label.length > 15 ? label : macroExpression && macroExpression.length ? macroExpression : null
 
 const paintDebugLines = (canvas: HTMLCanvasElement) => {

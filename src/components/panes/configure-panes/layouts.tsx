@@ -1,20 +1,18 @@
+import React from 'react'
+import styled from 'styled-components'
+import { title, component } from '../../icons/layouts'
+import { ControlRow, SpanOverflowCell, Label, Detail } from '../grid'
+import { AccentSlider } from '../../inputs/accent-slider'
+import { AccentSelect } from '../../inputs/accent-select'
+import { CenterPane } from '../pane'
+import { getSelectedDefinition, getSelectedLayoutOptions, updateLayoutOption } from 'src/store/definitionsSlice'
+import { useAppDispatch, useAppSelector } from 'src/store/hooks'
 import type { LayoutLabel } from '@the-via/reader'
 import type { FC } from 'react'
 
-import React from 'react'
-import { getSelectedDefinition, getSelectedLayoutOptions, updateLayoutOption } from 'src/store/definitionsSlice'
-import { useAppDispatch, useAppSelector } from 'src/store/hooks'
-import styled from 'styled-components'
-
-import { component, title } from '../../icons/layouts'
-import { AccentSelect } from '../../inputs/accent-select'
-import { AccentSlider } from '../../inputs/accent-slider'
-import { ControlRow, Detail, Label, SpanOverflowCell } from '../grid'
-import { CenterPane } from '../pane'
-
 const LayoutControl: React.FC<{
-	meta: { labels: LayoutLabel; selectedOption: number }
 	onChange: (val: any) => void
+	meta: { labels: LayoutLabel; selectedOption: number }
 }> = (props) => {
 	const { onChange, meta } = props
 	const { labels, selectedOption } = meta

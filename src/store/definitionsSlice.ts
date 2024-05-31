@@ -1,3 +1,7 @@
+import { createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit'
+import type { AuthorizedDevice, AuthorizedDevices, ConnectedDevices } from '../types/types'
+import { bytesIntoNum, numIntoBytes, packBits, unpackBits } from '../utils/bit-pack'
+import { KeyboardValue } from '../utils/keyboard-api'
 import type {
 	DefinitionVersion,
 	DefinitionVersionMap,
@@ -6,25 +10,18 @@ import type {
 	VIADefinitionV3,
 	VIAKey,
 } from '@the-via/reader'
-
-import { PayloadAction, createSelector, createSlice } from '@reduxjs/toolkit'
-import { del, entries, setMany, update } from 'idb-keyval'
-import { getMissingDefinition } from 'src/utils/device-store'
-import { getByteToKey } from 'src/utils/key'
-import { getBasicKeyDict } from 'src/utils/key-to-byte/dictionary-store'
-import { isFulfilledPromise } from 'src/utils/type-predicates'
-
-import type { AuthorizedDevice, AuthorizedDevices, ConnectedDevices } from '../types/types'
 import type { AppThunk, RootState } from './index'
-
-import { bytesIntoNum, numIntoBytes, packBits, unpackBits } from '../utils/bit-pack'
-import { KeyboardValue } from '../utils/keyboard-api'
 import {
-	ensureSupportedIds,
-	getSelectedConnectedDevice,
 	getSelectedDevicePath,
+	getSelectedConnectedDevice,
+	ensureSupportedIds,
 	getSelectedKeyboardAPI,
 } from './devicesSlice'
+import { getMissingDefinition } from 'src/utils/device-store'
+import { getBasicKeyDict } from 'src/utils/key-to-byte/dictionary-store'
+import { getByteToKey } from 'src/utils/key'
+import { del, entries, setMany, update } from 'idb-keyval'
+import { isFulfilledPromise } from 'src/utils/type-predicates'
 import { extractDeviceInfo, logAppError } from './errorsSlice'
 
 type LayoutOption = number
@@ -32,8 +29,8 @@ type LayoutOptionsMap = { [devicePath: string]: LayoutOption[] | null } // TODO:
 
 // TODO: should we use some redux local storage action instead of our custom via-app-store/device-store caching for definitions?
 type DefinitionsState = {
-	customDefinitions: KeyboardDictionary
 	definitions: KeyboardDictionary
+	customDefinitions: KeyboardDictionary
 	layoutOptionsMap: LayoutOptionsMap
 }
 
@@ -235,7 +232,7 @@ export const loadStoredCustomDefinitions = (): AppThunk => async (dispatch, getS
 		const dictionaryEntries: [string, DefinitionVersionMap][] = await entries()
 		const keyboardDictionary = dictionaryEntries
 			.filter(([key]) => {
-				return ['number', 'string'].includes(typeof key)
+				return ['string', 'number'].includes(typeof key)
 			})
 			.reduce((p, n) => {
 				return { ...p, [n[0]]: n[1] }
@@ -272,7 +269,7 @@ export const loadLayoutOptions = (): AppThunk => async (dispatch, getState) => {
 		const res = await api.getKeyboardValue(KeyboardValue.LAYOUT_OPTIONS, [], 4)
 		const options = unpackBits(
 			bytesIntoNum(res),
-			selectedDefinition.layouts.labels.map((layoutLabel: string | string[]) =>
+			selectedDefinition.layouts.labels.map((layoutLabel: string[] | string) =>
 				Array.isArray(layoutLabel) ? layoutLabel.slice(1).length : 2,
 			),
 		)

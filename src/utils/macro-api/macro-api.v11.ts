@@ -1,13 +1,12 @@
-import type { KeyboardAPI } from '../keyboard-api'
-
 import { isAutocompleteKeycode } from '../autocomplete-keycodes'
+import type { KeyboardAPI } from '../keyboard-api'
 import {
 	DelayTerminator,
-	IMacroAPI,
-	KeyAction,
 	KeyActionPrefix,
 	MacroTerminator,
+	KeyAction,
 	ValidationResult,
+	IMacroAPI,
 } from './macro-api.common'
 import { RawKeycodeSequence, RawKeycodeSequenceAction } from './types'
 
@@ -87,39 +86,6 @@ export class MacroAPIV11 implements IMacroAPI {
 		private byteToKey: Record<number, string>,
 	) {}
 
-	rawKeycodeSequencesToMacroBytes(sequences: RawKeycodeSequence[]) {
-		return sequences.flatMap((sequence) => {
-			const bytes: number[] = []
-			sequence.forEach((element) => {
-				switch (element[0]) {
-					case RawKeycodeSequenceAction.Tap:
-						bytes.push(KeyActionPrefix, KeyAction.Tap, this.basicKeyToByte[element[1]])
-						break
-					case RawKeycodeSequenceAction.Down:
-						bytes.push(KeyActionPrefix, KeyAction.Down, this.basicKeyToByte[element[1]])
-						break
-					case RawKeycodeSequenceAction.Up:
-						bytes.push(KeyActionPrefix, KeyAction.Up, this.basicKeyToByte[element[1]])
-						break
-					case RawKeycodeSequenceAction.Delay:
-						const delay: string = `${element[1] as number}`
-						bytes.push(
-							KeyActionPrefix,
-							KeyAction.Delay,
-							...delay.split('').map((char) => char.charCodeAt(0)),
-							DelayTerminator,
-						)
-						break
-					case RawKeycodeSequenceAction.CharacterStream:
-						bytes.push(...(element[1] as string).split('').map((char) => char.charCodeAt(0)))
-						break
-				}
-			})
-
-			bytes.push(MacroTerminator)
-			return bytes
-		})
-	}
 	async readRawKeycodeSequences(): Promise<RawKeycodeSequence[]> {
 		const bytes = await this.keyboardApi.getMacroBytes()
 		const macroCount = await this.keyboardApi.getMacroCount()
@@ -194,6 +160,39 @@ export class MacroAPIV11 implements IMacroAPI {
 		}
 
 		return sequences
+	}
+	rawKeycodeSequencesToMacroBytes(sequences: RawKeycodeSequence[]) {
+		return sequences.flatMap((sequence) => {
+			const bytes: number[] = []
+			sequence.forEach((element) => {
+				switch (element[0]) {
+					case RawKeycodeSequenceAction.Tap:
+						bytes.push(KeyActionPrefix, KeyAction.Tap, this.basicKeyToByte[element[1]])
+						break
+					case RawKeycodeSequenceAction.Down:
+						bytes.push(KeyActionPrefix, KeyAction.Down, this.basicKeyToByte[element[1]])
+						break
+					case RawKeycodeSequenceAction.Up:
+						bytes.push(KeyActionPrefix, KeyAction.Up, this.basicKeyToByte[element[1]])
+						break
+					case RawKeycodeSequenceAction.Delay:
+						const delay: string = `${element[1] as number}`
+						bytes.push(
+							KeyActionPrefix,
+							KeyAction.Delay,
+							...delay.split('').map((char) => char.charCodeAt(0)),
+							DelayTerminator,
+						)
+						break
+					case RawKeycodeSequenceAction.CharacterStream:
+						bytes.push(...(element[1] as string).split('').map((char) => char.charCodeAt(0)))
+						break
+				}
+			})
+
+			bytes.push(MacroTerminator)
+			return bytes
+		})
 	}
 	async writeRawKeycodeSequences(sequences: RawKeycodeSequence[]) {
 		const macroBytes = this.rawKeycodeSequencesToMacroBytes(sequences)

@@ -1,17 +1,16 @@
-import ReactTextareaAutocomplete from '@webscopeio/react-textarea-autocomplete'
 import React, { useEffect } from 'react'
+import { AccentButton } from '../../../../inputs/accent-button'
 import { getMacroValidator } from 'src/utils/macro-api'
-import styled from 'styled-components'
-
+import { ControlRow, Label, Detail } from '../../../grid'
+import { AccentSlider } from '../../../../inputs/accent-slider'
+import ReactTextareaAutocomplete from '@webscopeio/react-textarea-autocomplete'
 import {
 	AutocompleteItem,
 	AutocompleteLoading,
 	findKeycodes,
 } from '../../../../../components/inputs/autocomplete-keycode'
-import { AccentButton } from '../../../../inputs/accent-button'
-import { AccentSlider } from '../../../../inputs/accent-slider'
 import { ErrorMessage } from '../../../../styled'
-import { ControlRow, Detail, Label } from '../../../grid'
+import styled from 'styled-components'
 
 const TextArea = styled.textarea`
 	box-sizing: border-box;
@@ -68,12 +67,12 @@ const AutoHeightRow = styled(ControlRow)`
 `
 
 export const ScriptMode: React.FC<{
-	isDelaySupported: boolean
 	macro: string
-	macroIndex: number
 	protocol: number
-	saveMacros: (val: string) => void
 	setUnsavedMacro: (macro: string) => void
+	saveMacros: (val: string) => void
+	macroIndex: number
+	isDelaySupported: boolean
 }> = ({ macro, protocol, setUnsavedMacro, saveMacros, macroIndex, isDelaySupported }) => {
 	const trimmedMacro = macro.trimEnd()
 	const [currentValue, setCurrentValue] = React.useState(trimmedMacro)

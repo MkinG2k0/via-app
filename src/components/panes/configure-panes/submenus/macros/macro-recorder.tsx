@@ -1,40 +1,39 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { useDispatch } from 'react-redux'
-import { useAppSelector } from 'src/store/hooks'
-import { getMacroEditorSettings, setMacroEditorSettings } from 'src/store/settingsSlice'
-import { IKeycode, getKeycodes } from 'src/utils/key'
-import {
-	convertCharacterTaps,
-	convertToCharacterStreams,
-	foldKeydownKeyupKeys,
-	mergeConsecutiveWaits,
-	sequenceToExpression,
-	trimLastWait,
-} from 'src/utils/macro-api/macro-api.common'
 import {
 	OptimizedKeycodeSequence,
 	OptimizedKeycodeSequenceItem,
 	RawKeycodeSequence,
 	RawKeycodeSequenceAction,
 } from 'src/utils/macro-api/types'
-import { pipeline } from 'src/utils/pipeline'
 import { useKeycodeRecorder } from 'src/utils/use-keycode-recorder'
 import styled from 'styled-components'
-
-import { Deletable } from './deletable'
 import {
-	SequenceLabelSeparator,
-	WaitInput,
+	convertCharacterTaps,
+	foldKeydownKeyupKeys,
+	convertToCharacterStreams,
+	mergeConsecutiveWaits,
+	sequenceToExpression,
+	trimLastWait,
+} from 'src/utils/macro-api/macro-api.common'
+import { getKeycodes, IKeycode } from 'src/utils/key'
+import {
 	getSequenceItemComponent,
 	getSequenceLabel,
+	SequenceLabelSeparator,
+	WaitInput,
 } from './keycode-sequence-components'
 import { MacroEditControls } from './macro-controls'
+import { Deletable } from './deletable'
+import { pipeline } from 'src/utils/pipeline'
+import { useAppSelector } from 'src/store/hooks'
+import { getMacroEditorSettings, setMacroEditorSettings } from 'src/store/settingsSlice'
+import { useDispatch } from 'react-redux'
 
 declare global {
 	interface Navigator {
 		keyboard: {
-			lock(): Promise<void>
 			unlock(): Promise<void>
+			lock(): Promise<void>
 		}
 	}
 }
@@ -121,11 +120,11 @@ const cleanKeycodeSequence = (sequence: RawKeycodeSequence) => {
 }
 
 export const MacroRecorder: React.FC<{
-	isDelaySupported: boolean
-	saveMacro(macro?: string): void
 	selectedMacro?: OptimizedKeycodeSequence
-	setUnsavedMacro: (a: any) => void
 	undoMacro(): void
+	saveMacro(macro?: string): void
+	setUnsavedMacro: (a: any) => void
+	isDelaySupported: boolean
 }> = ({ selectedMacro, setUnsavedMacro, saveMacro, undoMacro, isDelaySupported }) => {
 	const [showOriginalMacro, setShowOriginalMacro] = useState(true)
 	const [isRecording, setIsRecording] = useState(false)

@@ -1,19 +1,17 @@
 import type { FC } from 'react'
-
+import { ColorPicker } from '../../../../inputs/color-picker'
+import { ControlRow, Label, Detail } from '../../../grid'
 import {
+	getLightingDefinition,
+	isVIADefinitionV2,
 	LightingValue,
 	VIADefinitionV2,
 	VIADefinitionV3,
-	getLightingDefinition,
-	isVIADefinitionV2,
 } from '@the-via/reader'
-import { getSelectedDefinition } from 'src/store/definitionsSlice'
+import { LightingControl } from './lighting-control'
 import { useAppDispatch, useAppSelector } from 'src/store/hooks'
 import { getSelectedLightingData, updateBacklightValue, updateCustomColor } from 'src/store/lightingSlice'
-
-import { ColorPicker } from '../../../../inputs/color-picker'
-import { ControlRow, Detail, Label } from '../../../grid'
-import { LightingControl } from './lighting-control'
+import { getSelectedDefinition } from 'src/store/definitionsSlice'
 
 const BacklightControls: [LightingValue, string, { type: string } & Record<string, any>][] = [
 	[LightingValue.BACKLIGHT_BRIGHTNESS, 'Brightness', { type: 'range', min: 0, max: 255 }],

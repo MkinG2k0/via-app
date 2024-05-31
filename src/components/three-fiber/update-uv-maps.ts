@@ -1,7 +1,7 @@
 import { useGLTF } from '@react-three/drei'
-import glbSrc from 'assets/models/keyboard_components.glb'
 import { useEffect } from 'react'
 import { Box3, BufferAttribute, BufferGeometry } from 'three'
+import glbSrc from 'assets/models/keyboard_components.glb'
 
 export const UpdateUVMaps = () => {
 	const keycapScene = useGLTF(glbSrc, true).scene

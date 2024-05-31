@@ -1,21 +1,20 @@
-import { LightingValue, getLightingDefinition, isVIADefinitionV2, isVIADefinitionV3 } from '@the-via/reader'
 import React, { createRef, useEffect } from 'react'
-import { getBasicKeyToByte, getSelectedDefinition, getSelectedKeyDefinitions } from 'src/store/definitionsSlice'
+import styled from 'styled-components'
+import { getByteForCode } from '../utils/key'
+import { startMonitoring, usbDetect } from '../utils/usb-hid'
+import { getLightingDefinition, isVIADefinitionV2, isVIADefinitionV3, LightingValue } from '@the-via/reader'
 import { getConnectedDevices, getSelectedKeyboardAPI } from 'src/store/devicesSlice'
 import { loadSupportedIds, reloadConnectedDevices } from 'src/store/devicesThunks'
+import { getDisableFastRemap } from '../store/settingsSlice'
 import { useAppDispatch, useAppSelector } from 'src/store/hooks'
 import {
 	getSelectedKey,
 	getSelectedLayerIndex,
 	updateSelectedKey as updateSelectedKeyAction,
 } from 'src/store/keymapSlice'
-import { KeyboardValue } from 'src/utils/keyboard-api'
+import { getBasicKeyToByte, getSelectedDefinition, getSelectedKeyDefinitions } from 'src/store/definitionsSlice'
 import { OVERRIDE_HID_CHECK } from 'src/utils/override'
-import styled from 'styled-components'
-
-import { getDisableFastRemap } from '../store/settingsSlice'
-import { getByteForCode } from '../utils/key'
-import { startMonitoring, usbDetect } from '../utils/usb-hid'
+import { KeyboardValue } from 'src/utils/keyboard-api'
 
 const ErrorHome = styled.div`
 	background: var(--bg_gradient);

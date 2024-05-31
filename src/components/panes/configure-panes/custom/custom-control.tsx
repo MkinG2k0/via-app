@@ -1,36 +1,33 @@
-import type { VIADefinitionV2, VIADefinitionV3, VIAItem } from '@the-via/reader'
-
 import React from 'react'
+import { PelpiKeycodeInput } from '../../../inputs/pelpi/keycode-input'
+import { AccentButton } from '../../../inputs/accent-button'
+import { AccentSlider } from '../../../inputs/accent-slider'
+import { AccentSelect } from '../../../inputs/accent-select'
+import { AccentRange } from '../../../inputs/accent-range'
+import { ControlRow, Label, Detail } from '../../grid'
+import type { VIADefinitionV2, VIADefinitionV3, VIAItem } from '@the-via/reader'
+import type { LightingData } from '../../../../types/types'
+import { ArrayColorPicker } from '../../../inputs/color-picker'
 import { ConnectedColorPalettePicker } from 'src/components/inputs/color-palette-picker'
 import { shiftFrom16Bit, shiftTo16Bit } from 'src/utils/keyboard-api'
 
-import type { LightingData } from '../../../../types/types'
-
-import { AccentButton } from '../../../inputs/accent-button'
-import { AccentRange } from '../../../inputs/accent-range'
-import { AccentSelect } from '../../../inputs/accent-select'
-import { AccentSlider } from '../../../inputs/accent-slider'
-import { ArrayColorPicker } from '../../../inputs/color-picker'
-import { PelpiKeycodeInput } from '../../../inputs/pelpi/keycode-input'
-import { ControlRow, Detail, Label } from '../../grid'
-
 type Props = {
-	definition: VIADefinitionV2 | VIADefinitionV3
 	lightingData: LightingData
+	definition: VIADefinitionV2 | VIADefinitionV3
 }
 
 type ControlMeta = [
-	React.FC<AdvancedControlProps> | string,
+	string | React.FC<AdvancedControlProps>,
 	{ type: string } & Partial<{
-		getOptions: (d: VIADefinitionV2 | VIADefinitionV3) => string[]
-		max: number
 		min: number
+		max: number
+		getOptions: (d: VIADefinitionV2 | VIADefinitionV3) => string[]
 	}>,
 ]
 
-type AdvancedControlProps = { meta: ControlMeta } & Props
+type AdvancedControlProps = Props & { meta: ControlMeta }
 
-export const VIACustomItem = React.memo((props: { _id: string } & VIACustomControlProps) => (
+export const VIACustomItem = React.memo((props: VIACustomControlProps & { _id: string }) => (
 	<ControlRow id={props._id}>
 		<Label>{props.label}</Label>
 		<Detail>
@@ -40,11 +37,11 @@ export const VIACustomItem = React.memo((props: { _id: string } & VIACustomContr
 ))
 
 type ControlGetSet = {
-	updateValue: (name: string, ...command: number[]) => void
 	value: number[]
+	updateValue: (name: string, ...command: number[]) => void
 }
 
-type VIACustomControlProps = ControlGetSet & VIAItem
+type VIACustomControlProps = VIAItem & ControlGetSet
 
 const boxOrArr = <N extends any>(elem: N | N[]) => (Array.isArray(elem) ? elem : [elem])
 

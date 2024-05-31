@@ -1,6 +1,6 @@
-import { Html } from '@react-three/drei'
-import { useThree } from '@react-three/fiber'
 import { GLTFExporter } from 'three/examples/jsm/exporters/GLTFExporter'
+import { useThree } from '@react-three/fiber'
+import { Html } from '@react-three/drei'
 
 export const ExportScene = () => {
 	const state = useThree()

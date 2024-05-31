@@ -9,11 +9,10 @@ import { DeviceInfo } from 'src/types/types'
 import { formatNumberAsHex } from 'src/utils/format'
 import styled from 'styled-components'
 import { Link, useLocation } from 'wouter'
-
 import { IconButtonContainer } from '../inputs/icon-button'
 import { CategoryMenuTooltip, IconButtonTooltip, MenuTooltip } from '../inputs/tooltip'
 import { MenuContainer } from './configure-panes/custom/menu-generator'
-import { CategoryIconContainer, Grid, IconContainer, MenuCell, Row, SpanOverflowCell } from './grid'
+import { Grid, MenuCell, Row, IconContainer, SpanOverflowCell, CategoryIconContainer } from './grid'
 import { Pane } from './pane'
 
 const Container = styled.div`
@@ -32,8 +31,8 @@ const printId = (id: number) => formatNumberAsHex(id, 4)
 const ErrorListContainer: React.FC<
 	PropsWithChildren<{
 		clear: () => void
-		hasErrors: boolean
 		save: () => void
+		hasErrors: boolean
 	}>
 > = (props) => {
 	const { clear, save, hasErrors } = props
@@ -80,7 +79,7 @@ const AppErrors: React.FC<{}> = ({}) => {
 
 async function saveErrors<T>(
 	errors: T[],
-	headers: Array<keyof (DeviceInfo & T)>,
+	headers: Array<keyof (T & DeviceInfo)>,
 	fileName: string,
 	printRow: (error: T) => string,
 ) {

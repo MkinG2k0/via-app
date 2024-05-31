@@ -1,47 +1,46 @@
+import React, { useState, useEffect } from 'react'
 import { faPlus } from '@fortawesome/free-solid-svg-icons'
+import styled from 'styled-components'
+import ChippyLoader from '../chippy-loader'
+import LoadingText from '../loading-text'
+import { CenterPane, ConfigureBasePane } from './pane'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
 	CustomFeaturesV2,
-	VIADefinitionV2,
-	VIADefinitionV3,
 	getLightingDefinition,
 	isVIADefinitionV2,
 	isVIADefinitionV3,
+	VIADefinitionV2,
+	VIADefinitionV3,
 } from '@the-via/reader'
-import React, { useEffect, useState } from 'react'
-import { useDispatch } from 'react-redux'
-import { getSelectedDefinition } from 'src/store/definitionsSlice'
-import { getConnectedDevices, getSupportedIds } from 'src/store/devicesSlice'
-import { reloadConnectedDevices } from 'src/store/devicesThunks'
+import { Grid, Row, IconContainer, MenuCell, ConfigureFlexCell } from './grid'
+import * as Keycode from './configure-panes/keycode'
+import * as Lighting from './configure-panes/lighting'
+import * as Macros from './configure-panes/macros'
+import * as SaveLoad from './configure-panes/save-load'
+import * as Layouts from './configure-panes/layouts'
+import * as RotaryEncoder from './configure-panes/custom/satisfaction75'
+import { makeCustomMenus } from './configure-panes/custom/menu-generator'
+import { LayerControl } from './configure-panes/layer-control'
+import { Badge } from './configure-panes/badge'
+import { AccentButtonLarge } from '../inputs/accent-button'
 import { useAppSelector } from 'src/store/hooks'
-import { useAppDispatch } from 'src/store/hooks'
+import { getSelectedDefinition } from 'src/store/definitionsSlice'
 import {
 	clearSelectedKey,
 	getLoadProgress,
 	getNumberOfLayers,
 	setConfigureKeyboardIsSelectable,
 } from 'src/store/keymapSlice'
-import { getIsMacroFeatureSupported } from 'src/store/macrosSlice'
+import { useDispatch } from 'react-redux'
+import { reloadConnectedDevices } from 'src/store/devicesThunks'
 import { getV3MenuComponents } from 'src/store/menusSlice'
-import { getRenderMode, getSelectedTheme } from 'src/store/settingsSlice'
+import { getIsMacroFeatureSupported } from 'src/store/macrosSlice'
+import { getConnectedDevices, getSupportedIds } from 'src/store/devicesSlice'
 import { isElectron } from 'src/utils/running-context'
-import styled from 'styled-components'
-
-import ChippyLoader from '../chippy-loader'
-import { AccentButtonLarge } from '../inputs/accent-button'
+import { useAppDispatch } from 'src/store/hooks'
 import { MenuTooltip } from '../inputs/tooltip'
-import LoadingText from '../loading-text'
-import { Badge } from './configure-panes/badge'
-import { makeCustomMenus } from './configure-panes/custom/menu-generator'
-import * as RotaryEncoder from './configure-panes/custom/satisfaction75'
-import * as Keycode from './configure-panes/keycode'
-import { LayerControl } from './configure-panes/layer-control'
-import * as Layouts from './configure-panes/layouts'
-import * as Lighting from './configure-panes/lighting'
-import * as Macros from './configure-panes/macros'
-import * as SaveLoad from './configure-panes/save-load'
-import { ConfigureFlexCell, Grid, IconContainer, MenuCell, Row } from './grid'
-import { CenterPane, ConfigureBasePane } from './pane'
+import { getRenderMode, getSelectedTheme } from 'src/store/settingsSlice'
 
 const MenuContainer = styled.div`
 	padding: 15px 10px 20px 10px;
@@ -76,7 +75,7 @@ const getRowsForKeyboard = (): typeof Rows => {
 }
 
 const filterInferredRows = (
-	selectedDefinition: VIADefinitionV2 | VIADefinitionV3,
+	selectedDefinition: VIADefinitionV3 | VIADefinitionV2,
 	showMacros: boolean,
 	numberOfLayers: number,
 	rows: typeof Rows,

@@ -1,6 +1,5 @@
 import { PropsWithChildren, useCallback, useEffect, useRef } from 'react'
 import styled from 'styled-components'
-
 import { AccentButton } from './accent-button'
 import { ModalContainer, PromptText } from './dialog-base'
 

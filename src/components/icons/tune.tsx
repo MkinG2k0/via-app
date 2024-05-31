@@ -1,6 +1,6 @@
 import React from 'react'
 
-const SvgIcTune24Px: React.FC = (props) => (
+const SvgIcTune24Px: React.FC<{}> = (props) => (
 	<svg height={17.187} width={17.187} {...props}>
 		<path
 			d={

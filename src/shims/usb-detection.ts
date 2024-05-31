@@ -1,10 +1,20 @@
-type USBMonitorEvent = 'change' | 'remove'
+type USBMonitorEvent = 'remove' | 'change'
 export class usbDetect {
-	static hasMonitored = false
-	static shouldMonitor = false
 	static _listeners: { change: Function[]; remove: Function[] } = {
 		change: [],
 		remove: [],
+	}
+	static shouldMonitor = false
+	static hasMonitored = false
+	static startMonitoring() {
+		this.shouldMonitor = true
+		if (!this.hasMonitored && navigator.hid) {
+			navigator.hid.addEventListener('connect', usbDetect.onConnect)
+			navigator.hid.addEventListener('disconnect', usbDetect.onDisconnect)
+		}
+	}
+	static stopMonitoring() {
+		this.shouldMonitor = false
 	}
 	private static onConnect = ({ device }: HIDConnectionEvent) => {
 		console.log('Detected Connection')
@@ -19,20 +29,10 @@ export class usbDetect {
 			usbDetect._listeners.remove.forEach((f) => f(device))
 		}
 	}
-	static off(eventName: USBMonitorEvent, cb: () => void) {
-		this._listeners[eventName] = this._listeners[eventName].filter((f) => f !== cb)
-	}
 	static on(eventName: USBMonitorEvent, cb: () => void) {
 		this._listeners[eventName] = [...this._listeners[eventName], cb]
 	}
-	static startMonitoring() {
-		this.shouldMonitor = true
-		if (!this.hasMonitored && navigator.hid) {
-			navigator.hid.addEventListener('connect', usbDetect.onConnect)
-			navigator.hid.addEventListener('disconnect', usbDetect.onDisconnect)
-		}
-	}
-	static stopMonitoring() {
-		this.shouldMonitor = false
+	static off(eventName: USBMonitorEvent, cb: () => void) {
+		this._listeners[eventName] = this._listeners[eventName].filter((f) => f !== cb)
 	}
 }

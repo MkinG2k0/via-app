@@ -1,4 +1,4 @@
-import { PayloadAction, createSelector, createSlice } from '@reduxjs/toolkit'
+import { createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { KeyboardAPI } from 'src/utils/keyboard-api'
 import { getMacroAPI, isDelaySupported } from 'src/utils/macro-api'
 import {
@@ -8,17 +8,15 @@ import {
 	sequenceToExpression,
 } from 'src/utils/macro-api/macro-api.common'
 import { RawKeycodeSequence } from 'src/utils/macro-api/types'
-
 import type { ConnectedDevice } from '../types/types'
-import type { AppThunk, RootState } from './index'
-
 import { getSelectedConnectedDevice, getSelectedKeyboardAPI } from './devicesSlice'
+import type { AppThunk, RootState } from './index'
 
 type MacrosState = {
 	ast: RawKeycodeSequence[]
-	isFeatureSupported: boolean
 	macroBufferSize: number
 	macroCount: number
+	isFeatureSupported: boolean
 }
 
 const macrosInitialState: MacrosState = {

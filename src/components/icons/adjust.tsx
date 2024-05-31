@@ -1,6 +1,6 @@
 import React from 'react'
 
-const SvgIcAdjust24Px: React.FC = (props) => (
+const SvgIcAdjust24Px: React.FC<{}> = (props) => (
 	<svg height={16.571} width={16.571} {...props}>
 		<path
 			d={

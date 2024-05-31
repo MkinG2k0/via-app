@@ -1,13 +1,12 @@
-import { FC, useCallback, useMemo, useState } from 'react'
+import { useState, useMemo, FC, useCallback } from 'react'
 import styled from 'styled-components'
-
-import { getSelectedConnectedDevice } from '../../../store/devicesSlice'
-import { useAppDispatch, useAppSelector } from '../../../store/hooks'
-import { getExpressions, getMacroCount, saveMacros } from '../../../store/macrosSlice'
-import { component, title } from '../../icons/adjust'
 import { OverflowCell, SubmenuOverflowCell, SubmenuRow } from '../grid'
 import { CenterPane } from '../pane'
+import { title, component } from '../../icons/adjust'
 import { MacroDetailPane } from './submenus/macros/macro-detail'
+import { useAppDispatch, useAppSelector } from '../../../store/hooks'
+import { getSelectedConnectedDevice } from '../../../store/devicesSlice'
+import { getExpressions, getMacroCount, saveMacros } from '../../../store/macrosSlice'
 
 const MacroPane = styled(CenterPane)`
 	height: 100%;

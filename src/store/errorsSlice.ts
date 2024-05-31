@@ -1,19 +1,18 @@
-import { PayloadAction, createSlice } from '@reduxjs/toolkit'
+import { RootState } from './index'
+import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { DeviceInfo } from 'src/types/types'
 
-import { RootState } from './index'
-
 export type KeyboardAPIError = {
-	commandBytes: number[]
 	commandName: string
-	deviceInfo: DeviceInfo
+	commandBytes: number[]
 	responseBytes: number[]
+	deviceInfo: DeviceInfo
 }
 
 export type AppError = {
-	deviceInfo: DeviceInfo
-	message: string
 	timestamp: string
+	message: string
+	deviceInfo: DeviceInfo
 }
 
 export const extractDeviceInfo = (device: DeviceInfo): DeviceInfo => ({

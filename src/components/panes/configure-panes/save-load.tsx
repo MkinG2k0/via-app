@@ -1,27 +1,26 @@
-import stringify from 'json-stringify-pretty-compact'
 import { FC, useState } from 'react'
-import { getBasicKeyToByte, getSelectedDefinition } from 'src/store/definitionsSlice'
-import { getSelectedConnectedDevice, getSelectedKeyboardAPI } from 'src/store/devicesSlice'
-import { useAppDispatch, useAppSelector } from 'src/store/hooks'
-import { getSelectedRawLayers, saveRawKeymapToDevice } from 'src/store/keymapSlice'
-import { getExpressions, saveMacros } from 'src/store/macrosSlice'
 import styled from 'styled-components'
-
+import stringify from 'json-stringify-pretty-compact'
+import { ErrorMessage, SuccessMessage } from '../../styled'
+import { AccentUploadButton } from '../../inputs/accent-upload-button'
+import { AccentButton } from '../../inputs/accent-button'
 import { getByteForCode, getCodeForByte } from '../../../utils/key'
 import deprecatedKeycodes from '../../../utils/key-to-byte/deprecated-keycodes'
-import { component, title } from '../../icons/save'
-import { AccentButton } from '../../inputs/accent-button'
-import { AccentUploadButton } from '../../inputs/accent-upload-button'
-import { ErrorMessage, SuccessMessage } from '../../styled'
-import { ControlRow, Detail, Label, SpanOverflowCell } from '../grid'
+import { title, component } from '../../icons/save'
 import { CenterPane } from '../pane'
+import { Detail, Label, ControlRow, SpanOverflowCell } from '../grid'
+import { getBasicKeyToByte, getSelectedDefinition } from 'src/store/definitionsSlice'
+import { getSelectedRawLayers, saveRawKeymapToDevice } from 'src/store/keymapSlice'
+import { useAppDispatch, useAppSelector } from 'src/store/hooks'
+import { getSelectedConnectedDevice, getSelectedKeyboardAPI } from 'src/store/devicesSlice'
+import { getExpressions, saveMacros } from 'src/store/macrosSlice'
 
 type ViaSaveFile = {
-	encoders?: [string, string][][]
-	layers: string[][]
-	macros?: string[]
 	name: string
 	vendorProductId: number
+	layers: string[][]
+	macros?: string[]
+	encoders?: [string, string][][]
 }
 
 const isViaSaveFile = (obj: any): obj is ViaSaveFile => obj && obj.name && obj.layers && obj.vendorProductId
@@ -53,8 +52,8 @@ export const Pane: FC = () => {
 		return null
 	}
 
-	const [errorMessage, setErrorMessage] = useState<null | string>(null)
-	const [successMessage, setSuccessMessage] = useState<null | string>(null)
+	const [errorMessage, setErrorMessage] = useState<string | null>(null)
+	const [successMessage, setSuccessMessage] = useState<string | null>(null)
 
 	const getEncoderValues = async () => {
 		const { layouts } = selectedDefinition

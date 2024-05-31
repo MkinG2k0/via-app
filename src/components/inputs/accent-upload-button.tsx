@@ -1,11 +1,10 @@
 import React from 'react'
-
 import { AccentButton } from './accent-button'
 type Props = {
-	children: string
-	inputRef?: React.MutableRefObject<HTMLInputElement | undefined>
-	multiple?: boolean
 	onLoad: (files: File[]) => void
+	multiple?: boolean
+	inputRef?: React.MutableRefObject<HTMLInputElement | undefined>
+	children: string
 }
 
 export function AccentUploadButton(props: Props) {

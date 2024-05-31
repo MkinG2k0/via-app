@@ -151,7 +151,7 @@ export const advancedKeycodeToString = (
 	inputKeycode: number,
 	basicKeyToByte: Record<string, number>,
 	byteToKey: Record<number, string>,
-): null | string => {
+): string | null => {
 	const valueToRange = Object.entries(quantumRanges(basicKeyToByte))
 		.map(([key, value]) => [value, key])
 		.sort((a, b) => (a[0] as number) - (b[0] as number))
@@ -170,7 +170,7 @@ export const advancedKeycodeToString = (
 	if (topLevelModKeys.includes(lastRange as string)) {
 		return topLevelModToString(inputKeycode, byteToKey)
 	}
-	let humanReadable: null | string = `${(topLevelValueToMacro(basicKeyToByte) as any)[lastValue]}(`
+	let humanReadable: string | null = `${(topLevelValueToMacro(basicKeyToByte) as any)[lastValue]}(`
 	const remainder = inputKeycode & ~lastValue
 	let layer = 0
 	let keycode = ''

@@ -1,6 +1,5 @@
 import React from 'react'
 import styled from 'styled-components'
-
 import { advancedStringToKeycode, anyKeycodeToString } from '../../utils/advanced-keys'
 
 const NormalInput = styled.input`
@@ -29,22 +28,56 @@ const ErrorInput = styled(NormalInput)`
 `
 
 type Props = {
-	basicKeyToByte: Record<string, number>
-	byteToKey: Record<number, string>
-	className?: string
 	defaultValue: number
 	onBlur: (newValue: number) => void
+	className?: string
+	basicKeyToByte: Record<string, number>
+	byteToKey: Record<number, string>
 }
 
 type State = {
-	currentParsed: number
 	currentValue: string
+	currentParsed: number
 	defaultValueAsString: string
 	isError: boolean
 	lastDefault: number
 }
 
 export class KeycodeTextInput extends React.Component<Props, State> {
+	constructor(props: Props) {
+		super(props)
+		const { defaultValue, basicKeyToByte, byteToKey } = props
+		const currentValue = anyKeycodeToString(defaultValue, basicKeyToByte, byteToKey)
+		this.state = {
+			lastDefault: defaultValue,
+			defaultValueAsString: currentValue,
+			currentParsed: defaultValue,
+			currentValue,
+			isError: false,
+		}
+	}
+
+	// It's usually best to avoid this function, but we're actually using it properly
+	// We want to maintain state here for validation purposes.
+	// But if we get a new prop, it means our change has made it up to where it matters
+	// And we should use it to represent what's actually coming from the kb
+	static getDerivedStateFromProps(props: Props, state: State) {
+		if (state.lastDefault !== props.defaultValue && state.currentParsed !== props.defaultValue) {
+			return {
+				...state,
+				currentValue: anyKeycodeToString(props.defaultValue, props.basicKeyToByte, props.byteToKey),
+				currentParsed: props.defaultValue,
+				lastDefault: props.defaultValue,
+			}
+		}
+		return state
+	}
+
+	handleChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
+		const value = e.target.value
+		this.setState({ currentValue: value })
+	}
+
 	handleBlur: React.ChangeEventHandler<HTMLInputElement> = (e) => {
 		const { onBlur, basicKeyToByte } = this.props
 		const { lastDefault } = this.state
@@ -66,40 +99,6 @@ export class KeycodeTextInput extends React.Component<Props, State> {
 		} else {
 			this.setState({ isError: true })
 		}
-	}
-
-	// It's usually best to avoid this function, but we're actually using it properly
-	// We want to maintain state here for validation purposes.
-	// But if we get a new prop, it means our change has made it up to where it matters
-	handleChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
-		const value = e.target.value
-		this.setState({ currentValue: value })
-	}
-
-	constructor(props: Props) {
-		super(props)
-		const { defaultValue, basicKeyToByte, byteToKey } = props
-		const currentValue = anyKeycodeToString(defaultValue, basicKeyToByte, byteToKey)
-		this.state = {
-			lastDefault: defaultValue,
-			defaultValueAsString: currentValue,
-			currentParsed: defaultValue,
-			currentValue,
-			isError: false,
-		}
-	}
-
-	// And we should use it to represent what's actually coming from the kb
-	static getDerivedStateFromProps(props: Props, state: State) {
-		if (state.lastDefault !== props.defaultValue && state.currentParsed !== props.defaultValue) {
-			return {
-				...state,
-				currentValue: anyKeycodeToString(props.defaultValue, props.basicKeyToByte, props.byteToKey),
-				currentParsed: props.defaultValue,
-				lastDefault: props.defaultValue,
-			}
-		}
-		return state
 	}
 
 	render() {

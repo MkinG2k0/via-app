@@ -1,12 +1,11 @@
 import { VIAKey } from '@the-via/reader'
 import { CSSVarObject } from 'src/utils/keyboard-rendering'
 import styled from 'styled-components'
-
 import { generateRowColArray } from '../n-links/matrix-lines'
 
 type MatrixProps = {
-	colKeys: number[][][]
 	rowKeys: number[][][]
+	colKeys: number[][][]
 }
 
 const Matrix: React.FC<MatrixProps> = ({ rowKeys, colKeys }) => (
@@ -47,11 +46,11 @@ const ColLine = styled.polyline`
 `
 
 export const MatrixLines: React.FC<{
-	cols: number
-	height: number
 	keys: VIAKey[]
 	rows: number
+	cols: number
 	width: number
+	height: number
 }> = ({ keys, rows, cols, width, height }) => {
 	const { rowKeys, colKeys } = generateRowColArray(keys, rows, cols)
 	return <Matrix colKeys={colKeys} rowKeys={rowKeys} />

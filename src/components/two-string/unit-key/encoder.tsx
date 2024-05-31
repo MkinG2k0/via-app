@@ -144,9 +144,9 @@ const EncoderKeyContent2 = styled.div<{ $innerPadding: number; $size: number }>`
 `
 
 export const EncoderKey = (props: {
-	onClick: (evt: React.MouseEvent) => void
 	size: number
 	style: React.CSSProperties
+	onClick: (evt: React.MouseEvent) => void
 }) => {
 	return (
 		<EncoderKeyContainer onClick={props.onClick} style={props.style}>

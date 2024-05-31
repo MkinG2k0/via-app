@@ -1,7 +1,6 @@
-import type { KeyboardAPI } from '../keyboard-api'
-
 import { getByteToKey } from '../key'
 import { getBasicKeyDict } from '../key-to-byte/dictionary-store'
+import type { KeyboardAPI } from '../keyboard-api'
 import { MacroAPI, validateMacroExpression } from './macro-api'
 import { MacroAPIV11, validateMacroExpressionV11 } from './macro-api.v11'
 

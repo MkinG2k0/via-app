@@ -1,14 +1,30 @@
+import { FC, useState, useEffect, useMemo } from 'react'
+import styled from 'styled-components'
+import { Button } from '../../inputs/button'
+import { KeycodeModal } from '../../inputs/custom-keycode-modal'
+import { title, component } from '../../icons/keyboard'
+import * as EncoderPane from './encoder'
+import {
+	keycodeInMaster,
+	getByteForCode,
+	getKeycodes,
+	getOtherMenu,
+	IKeycode,
+	IKeycodeMenu,
+	categoriesForKeycodeModule,
+} from '../../../utils/key'
+import { ErrorMessage } from '../../styled'
 import {
 	KeycodeType,
-	VIADefinitionV3,
 	getLightingDefinition,
-	isVIADefinitionV2,
 	isVIADefinitionV3,
+	isVIADefinitionV2,
+	VIADefinitionV3,
 } from '@the-via/reader'
-import { FC, useEffect, useMemo, useState } from 'react'
+import { OverflowCell, SubmenuOverflowCell, SubmenuRow } from '../grid'
+import { useAppDispatch, useAppSelector } from 'src/store/hooks'
 import { getBasicKeyToByte, getSelectedDefinition, getSelectedKeyDefinitions } from 'src/store/definitionsSlice'
 import { getSelectedConnectedDevice } from 'src/store/devicesSlice'
-import { useAppDispatch, useAppSelector } from 'src/store/hooks'
 import {
 	getSelectedKey,
 	getSelectedKeymap,
@@ -18,23 +34,6 @@ import {
 import { getMacroCount } from 'src/store/macrosSlice'
 import { disableGlobalHotKeys, enableGlobalHotKeys, getDisableFastRemap } from 'src/store/settingsSlice'
 import { getNextKey } from 'src/utils/keyboard-rendering'
-import styled from 'styled-components'
-
-import {
-	IKeycode,
-	IKeycodeMenu,
-	categoriesForKeycodeModule,
-	getByteForCode,
-	getKeycodes,
-	getOtherMenu,
-	keycodeInMaster,
-} from '../../../utils/key'
-import { component, title } from '../../icons/keyboard'
-import { Button } from '../../inputs/button'
-import { KeycodeModal } from '../../inputs/custom-keycode-modal'
-import { ErrorMessage } from '../../styled'
-import { OverflowCell, SubmenuOverflowCell, SubmenuRow } from '../grid'
-import * as EncoderPane from './encoder'
 const KeycodeList = styled.div`
 	display: grid;
 	grid-template-columns: repeat(auto-fill, 64px);
@@ -153,7 +152,7 @@ export const KeycodePane: FC = () => {
 	}
 
 	const [selectedCategory, setSelectedCategory] = useState(KeycodeCategories[0].id)
-	const [mouseOverDesc, setMouseOverDesc] = useState<null | string>(null)
+	const [mouseOverDesc, setMouseOverDesc] = useState<string | null>(null)
 	const [showKeyTextInputModal, setShowKeyTextInputModal] = useState(false)
 
 	const getEnabledMenus = (): IKeycodeMenu[] => {

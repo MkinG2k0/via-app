@@ -1,15 +1,14 @@
-import { SpringValue, a, useSpring } from '@react-spring/three'
 import { PresentationControls } from '@react-three/drei'
 import { ThreeEvent } from '@react-three/fiber'
 import React, { useEffect, useMemo, useState } from 'react'
 import { shallowEqual } from 'react-redux'
+import { calculateKeyboardFrameDimensions, CSSVarObject } from 'src/utils/keyboard-rendering'
 import { KeyboardCanvasContentProps, KeyboardCanvasProps } from 'src/types/keyboard-rendering'
-import { DisplayMode } from 'src/types/keyboard-rendering'
-import { CSSVarObject, calculateKeyboardFrameDimensions } from 'src/utils/keyboard-rendering'
-
 import { Case } from './case'
 import { KeyGroup } from './key-group'
+import { DisplayMode } from 'src/types/keyboard-rendering'
 import { MatrixLines } from './matrix-lines'
+import { a, SpringValue, useSpring } from '@react-spring/three'
 
 export const KeyboardCanvas: React.FC<KeyboardCanvasProps<ThreeEvent<MouseEvent>>> = (props) => {
 	const { containerDimensions, shouldHide, ...otherProps } = props
@@ -58,10 +57,10 @@ export const KeyboardCanvas: React.FC<KeyboardCanvasProps<ThreeEvent<MouseEvent>
 }
 
 const KeyboardCanvasContent: React.FC<
-	{
-		tilt: SpringValue<number>
+	KeyboardCanvasContentProps<ThreeEvent<MouseEvent>> & {
 		verticalPostion: SpringValue<number>
-	} & KeyboardCanvasContentProps<ThreeEvent<MouseEvent>>
+		tilt: SpringValue<number>
+	}
 > = React.memo((props) => {
 	const {
 		matrixKeycodes,

@@ -1,6 +1,5 @@
-import styled from 'styled-components'
-
 import getIconColor from '../icons/get-icon-color'
+import styled from 'styled-components'
 
 export const Grid = styled.div`
 	height: 100%;

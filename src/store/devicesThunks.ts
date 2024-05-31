@@ -1,23 +1,20 @@
 // This is conceptually an extension of devicesSlice, but has been separated to remove circular module dependencies between deviceSlice and other slices that import from it
 
-import type { AuthorizedDevice, ConnectedDevice, ConnectedDevices, WebVIADevice } from 'src/types/types'
-
-import { tryForgetDevice } from 'src/shims/node-hid'
-import { createRetry } from 'src/utils/retry'
-import { isAuthorizedDeviceConnected } from 'src/utils/type-predicates'
-
-import type { AppThunk } from './index'
-
 import { getDefinitionsFromStore, getSupportedIdsFromStore, syncStore } from '../utils/device-store'
 import { getRecognisedDevices, getVendorProductId } from '../utils/hid-keyboards'
 import { KeyboardAPI } from '../utils/keyboard-api'
+import type { AppThunk } from './index'
 import {
-	getDefinitions,
-	loadLayoutOptions,
-	loadStoredCustomDefinitions,
 	reloadDefinitions,
+	loadLayoutOptions,
 	updateDefinitions,
+	getDefinitions,
+	loadStoredCustomDefinitions,
 } from './definitionsSlice'
+import { loadKeymapFromDevice } from './keymapSlice'
+import { updateLightingData } from './lightingSlice'
+import { loadMacros } from './macrosSlice'
+import { updateV3MenuData } from './menusSlice'
 import {
 	clearAllDevices,
 	getConnectedDevices,
@@ -29,11 +26,11 @@ import {
 	updateConnectedDevices,
 	updateSupportedIds,
 } from './devicesSlice'
+import type { AuthorizedDevice, ConnectedDevice, ConnectedDevices, WebVIADevice } from 'src/types/types'
+import { createRetry } from 'src/utils/retry'
 import { extractDeviceInfo, logAppError } from './errorsSlice'
-import { loadKeymapFromDevice } from './keymapSlice'
-import { updateLightingData } from './lightingSlice'
-import { loadMacros } from './macrosSlice'
-import { updateV3MenuData } from './menusSlice'
+import { tryForgetDevice } from 'src/shims/node-hid'
+import { isAuthorizedDeviceConnected } from 'src/utils/type-predicates'
 
 const selectConnectedDeviceRetry = createRetry(8, 100)
 

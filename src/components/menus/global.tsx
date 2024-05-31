@@ -1,14 +1,13 @@
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import React, { useMemo } from 'react'
-import { useAppSelector } from 'src/store/hooks'
-import { getShowDesignTab } from 'src/store/settingsSlice'
 import styled from 'styled-components'
 import { Link, useLocation } from 'wouter'
-
 import PANES from '../../utils/pane-config'
+import { useAppSelector } from 'src/store/hooks'
+import { getShowDesignTab } from 'src/store/settingsSlice'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { CategoryMenuTooltip } from '../inputs/tooltip'
-import { ErrorLink, ErrorsPaneConfig } from '../panes/errors'
 import { CategoryIconContainer } from '../panes/grid'
+import { ErrorLink, ErrorsPaneConfig } from '../panes/errors'
 import { ExternalLinks } from './external-links'
 
 const Container = styled.div`

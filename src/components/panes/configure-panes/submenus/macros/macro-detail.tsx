@@ -1,15 +1,14 @@
-import { faClapperboard, faCode } from '@fortawesome/free-solid-svg-icons'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import React, { useCallback, useEffect, useState } from 'react'
-import { ProgressBarTooltip } from 'src/components/inputs/tooltip'
-import { getSelectedConnectedDevice, getSelectedKeyboardAPI } from 'src/store/devicesSlice'
-import { useAppSelector } from 'src/store/hooks'
-import { getIsDelaySupported, getMacroBufferSize } from 'src/store/macrosSlice'
-import { getMacroAPI } from 'src/utils/macro-api'
 import styled from 'styled-components'
-
 import { MacroRecorder } from './macro-recorder'
+import { useAppSelector } from 'src/store/hooks'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faClapperboard, faCode } from '@fortawesome/free-solid-svg-icons'
 import { ScriptMode } from './script-mode'
+import { ProgressBarTooltip } from 'src/components/inputs/tooltip'
+import { getIsDelaySupported, getMacroBufferSize } from 'src/store/macrosSlice'
+import { getSelectedConnectedDevice, getSelectedKeyboardAPI } from 'src/store/devicesSlice'
+import { getMacroAPI } from 'src/utils/macro-api'
 
 const ProgressBarContainer = styled.div`
 	position: relative;
@@ -83,9 +82,9 @@ const CenterTabContainer = styled(TabContainer)`
 
 type Props = {
 	macroExpressions: string[]
-	protocol: number
-	saveMacros: (macro: string) => void
 	selectedMacro: number
+	saveMacros: (macro: string) => void
+	protocol: number
 }
 
 const printBytesUsed = (bytesUsed: number, bufferSize: number) => {

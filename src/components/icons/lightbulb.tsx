@@ -1,6 +1,6 @@
 import React from 'react'
 
-const SvgIcLightbulbOutline24Px: React.FC = (props) => (
+const SvgIcLightbulbOutline24Px: React.FC<{}> = (props) => (
 	<svg height={17} width={11.9} {...props}>
 		<path
 			d={

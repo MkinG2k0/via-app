@@ -1,13 +1,11 @@
-import type { FC } from 'react'
-
-import { LightingValue, getLightingDefinition, isVIADefinitionV2 } from '@the-via/reader'
-import { getSelectedDefinition } from 'src/store/definitionsSlice'
-import { useAppSelector } from 'src/store/hooks'
-import { useAppDispatch } from 'src/store/hooks'
-import { getSelectedLightingData, updateBacklightValue } from 'src/store/lightingSlice'
-
+import { ControlRow, Label, Detail } from '../../../grid'
 import { AccentSlider } from '../../../../inputs/accent-slider'
-import { ControlRow, Detail, Label } from '../../../grid'
+import { getLightingDefinition, isVIADefinitionV2, LightingValue } from '@the-via/reader'
+import { getSelectedLightingData, updateBacklightValue } from 'src/store/lightingSlice'
+import { useAppSelector } from 'src/store/hooks'
+import { getSelectedDefinition } from 'src/store/definitionsSlice'
+import type { FC } from 'react'
+import { useAppDispatch } from 'src/store/hooks'
 export const LayoutConfigValues = [
 	LightingValue.BACKLIGHT_USE_7U_SPACEBAR,
 	LightingValue.BACKLIGHT_USE_ISO_ENTER,

@@ -1,24 +1,22 @@
-import type { LightingValue, VIADefinitionV2, VIADefinitionV3 } from '@the-via/reader'
-
 import React from 'react'
-import { getSelectedDefinition } from 'src/store/definitionsSlice'
-import { useAppSelector } from 'src/store/hooks'
-import { useAppDispatch } from 'src/store/hooks'
-import { getSelectedLightingData, updateBacklightValue } from 'src/store/lightingSlice'
-
-import { AccentRange } from '../../../../inputs/accent-range'
-import { AccentSelect } from '../../../../inputs/accent-select'
 import { AccentSlider } from '../../../../inputs/accent-slider'
+import { AccentSelect } from '../../../../inputs/accent-select'
+import { AccentRange } from '../../../../inputs/accent-range'
+import { ControlRow, Label, Detail } from '../../../grid'
+import type { VIADefinitionV2, VIADefinitionV3, LightingValue } from '@the-via/reader'
 import { ArrayColorPicker } from '../../../../inputs/color-picker'
-import { ControlRow, Detail, Label } from '../../../grid'
+import { getSelectedLightingData, updateBacklightValue } from 'src/store/lightingSlice'
+import { useAppSelector } from 'src/store/hooks'
+import { getSelectedDefinition } from 'src/store/definitionsSlice'
+import { useAppDispatch } from 'src/store/hooks'
 
 export type ControlMeta = [
 	LightingValue,
-	React.FC<AdvancedControlProps> | string,
+	string | React.FC<AdvancedControlProps>,
 	{ type: string } & Partial<{
-		getOptions: (d: VIADefinitionV2 | VIADefinitionV3) => string[]
-		max: number
 		min: number
+		max: number
+		getOptions: (d: VIADefinitionV2 | VIADefinitionV3) => string[]
 	}>,
 ]
 type AdvancedControlProps = { meta: ControlMeta }

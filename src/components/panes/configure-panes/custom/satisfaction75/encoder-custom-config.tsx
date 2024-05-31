@@ -1,7 +1,6 @@
 import { getBasicKeyToByte } from 'src/store/definitionsSlice'
 import { useAppSelector } from 'src/store/hooks'
 import styled from 'styled-components'
-
 import KeycodeTextInput from '../../../../inputs/keycode-text-input'
 
 const RowDiv = styled.div`
@@ -22,10 +21,10 @@ const KeyInput = styled(KeycodeTextInput as any)`
 `
 
 type Props = {
-	behaviors: number[]
-	encoderIdx: number
-	onChange: (encoderIdx: number, behavior: number, newValue: number) => void
 	title: string
+	encoderIdx: number
+	behaviors: number[]
+	onChange: (encoderIdx: number, behavior: number, newValue: number) => void
 }
 
 export const EncoderCustomConfig = (props: Props) => {

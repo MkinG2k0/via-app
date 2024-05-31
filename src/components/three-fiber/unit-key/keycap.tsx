@@ -6,10 +6,9 @@ import { shallowEqual } from 'react-redux'
 import { DisplayMode, KeycapState, ThreeFiberKeycapProps } from 'src/types/keyboard-rendering'
 import { TestKeyState } from 'src/types/types'
 import * as THREE from 'three'
-
 import { KeycapTooltip } from '../../inputs/tooltip'
 
-const getMacroData = ({ macroExpression, label }: { label: string; macroExpression?: string }) =>
+const getMacroData = ({ macroExpression, label }: { macroExpression?: string; label: string }) =>
 	label && label.length > 15 ? label : macroExpression && macroExpression.length ? macroExpression : null
 
 const paintEncoder = (
@@ -143,8 +142,8 @@ const paintKeycapLabel = (canvas: HTMLCanvasElement, rect: Rect, legendColor: st
 
 // coordinates of corners of keycap and top face in texture coordinates (UVs)
 type TextureRects = {
-	faceRect: Rect
 	keycapRect: Rect
+	faceRect: Rect
 }
 
 const calculateTextureRects = (
