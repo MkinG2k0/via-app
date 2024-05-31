@@ -1,9 +1,9 @@
 import {defineConfig} from 'vite';
 import react from '@vitejs/plugin-react';
 import path from 'path';
-import {splitVendorChunkPlugin} from 'vite';
 import {createHtmlPlugin} from 'vite-plugin-html';
 import fs from 'fs';
+import mkcert from 'vite-plugin-mkcert';
 
 const hash = fs.readFileSync('public/definitions/hash.json', 'utf8');
 
@@ -18,11 +18,11 @@ export default defineConfig({
         },
       },
     }),
-    splitVendorChunkPlugin(),
+    mkcert(),
   ],
   assetsInclude: ['**/*.glb'],
   envDir: '.',
-  server: {open: true},
+  server: {open: true,https:{}},
   resolve: {
     alias: {
       src: path.resolve(__dirname, './src'),
