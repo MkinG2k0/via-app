@@ -1,6 +1,6 @@
-export type PelpiMeta<A = {}> = A;
+export type PelpiMeta<A = {}> = A
 export type PelpiInput<A> = {
-  value: number;
-  setValue: (val: number) => void;
-  meta: PelpiMeta<A>;
-};
+	meta: PelpiMeta<A>
+	setValue: (val: number) => void
+	value: number
+}

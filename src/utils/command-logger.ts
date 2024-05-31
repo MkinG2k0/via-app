@@ -1,26 +1,22 @@
 type Entry = {
-  kbAddr: string;
-  request: number[];
-  response: number[];
-  ts: number;
-};
+	kbAddr: string
+	request: number[]
+	response: number[]
+	ts: number
+}
 
-const entryLog: Entry[] = [];
+const entryLog: Entry[] = []
 
-export const logCommand = (
-  kbAddr: string,
-  request: number[],
-  response: number[],
-) => {
-  entryLog.push({kbAddr, request, response, ts: Date.now()});
-};
+export const logCommand = (kbAddr: string, request: number[], response: number[]) => {
+	entryLog.push({ kbAddr, request, response, ts: Date.now() })
+}
 
 export const getLog = ((window as any).__getLogs = () => {
-  return entryLog;
-});
+	return entryLog
+})
 
 window.addEventListener('message', (m) => {
-  if (m.data.command === 'fetchLogs') {
-    window.postMessage({command: 'getLogs', payload: getLog()}, '*');
-  }
-});
+	if (m.data.command === 'fetchLogs') {
+		window.postMessage({ command: 'getLogs', payload: getLog() }, '*')
+	}
+})

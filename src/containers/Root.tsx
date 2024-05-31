@@ -1,10 +1,10 @@
-import {Provider} from 'react-redux';
+import { Provider } from 'react-redux'
 
-import {store} from '../store';
-import Routes from '../Routes';
+import Routes from '../Routes'
+import { store } from '../store'
 
 export default () => (
-  <Provider store={store}>
-    <Routes />
-  </Provider>
-);
+	<Provider store={store}>
+		<Routes />
+	</Provider>
+)

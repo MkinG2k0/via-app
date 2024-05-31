@@ -1,29 +1,21 @@
 export enum RawKeycodeSequenceAction {
-  Tap = 1,
-  Down = 2,
-  Up = 3,
-  Delay = 4,
-  CharacterStream = 5,
+	CharacterStream = 5,
+	Delay = 4,
+	Down = 2,
+	Tap = 1,
+	Up = 3,
 }
 
 export enum GroupedKeycodeSequenceAction {
-  Chord = 6,
+	Chord = 6,
 }
 
-export type RawKeycodeSequenceItem = [
-  RawKeycodeSequenceAction,
-  string | number,
-];
+export type RawKeycodeSequenceItem = [RawKeycodeSequenceAction, number | string]
 
-export type RawKeycodeSequence = RawKeycodeSequenceItem[];
+export type RawKeycodeSequence = RawKeycodeSequenceItem[]
 
-export type GroupedKeycodeSequenceItem = [
-  GroupedKeycodeSequenceAction,
-  string[],
-];
+export type GroupedKeycodeSequenceItem = [GroupedKeycodeSequenceAction, string[]]
 
-export type OptimizedKeycodeSequenceItem =
-  | RawKeycodeSequenceItem
-  | GroupedKeycodeSequenceItem;
+export type OptimizedKeycodeSequenceItem = GroupedKeycodeSequenceItem | RawKeycodeSequenceItem
 
-export type OptimizedKeycodeSequence = OptimizedKeycodeSequenceItem[];
+export type OptimizedKeycodeSequence = OptimizedKeycodeSequenceItem[]

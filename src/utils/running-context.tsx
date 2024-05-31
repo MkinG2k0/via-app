@@ -1,1 +1,1 @@
-export const isElectron = /Electron/.test(navigator.userAgent);
+export const isElectron = /Electron/.test(navigator.userAgent)
