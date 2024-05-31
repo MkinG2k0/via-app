@@ -3,9 +3,9 @@
   "scripts": {
     "start": "concurrently --names \"vite,azure-fn-dev\" -c \"bgBlue,bgMagenta\" \"npm run dev\" \"npm --prefix api start\"",
     "dev": "node scripts/build-definitions.js && vite --force",
+    "lint": "eslint --fix ./src/**/*.ts*",
     "build": "npm run build:kbs && tsc && vite build",
     "format": "prettier --write \"src/**/*.{js,jsx,ts,tsx}\"",
-    "lint": "prettier --check \"src/**/*.{js,jsx,ts,tsx}\"",
     "refresh-kbs": "npm uninstall --force via-keyboards && npm install --force github:the-via/keyboards",
     "build:azure": "npm run refresh-kbs && npm run build",
     "preview": "vite preview",
@@ -68,6 +68,16 @@
     "ts-prune": "^0.10.3",
     "typescript": "^4.9.5",
     "vite": "^5.2.12",
-    "vite-plugin-html": "^3.2.2"
+    "vite-plugin-html": "^3.2.2",
+    "eslint": "8.51.0",
+    "@typescript-eslint/eslint-plugin": "^6.21.0",
+    "@typescript-eslint/parser": "^6.21.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-jsx-a11y": "^6.8.0",
+    "eslint-plugin-import": "^2.29.1",
+    "eslint-plugin-perfectionist": "^2.10.0",
+    "eslint-plugin-prettier": "^5.1.3",
+    "eslint-plugin-promise": "^6.1.1",
+    "eslint-plugin-react": "^7.34.1"
   }
 }
