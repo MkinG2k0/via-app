@@ -112,5 +112,5 @@ export const getExpressions = createSelector(getAST, (sequences) =>
 
 export const getIsDelaySupported = createSelector(
 	getSelectedConnectedDevice,
-	(device) => Boolean(device) && isDelaySupported(device.protocol),
+	(device) => Boolean(device) && isDelaySupported((device as ConnectedDevice).protocol),
 )
