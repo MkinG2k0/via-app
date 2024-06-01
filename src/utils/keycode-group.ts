@@ -198,4 +198,4 @@ export const keycodeGroup: IKeycodeGroupItem[] = [
 	},
 ]
 
-export const allKeyCode = keycodeGroup.flatMap((keycodeGroup) => keycodeGroup.keycodes)
+export const allBasicKeyCode = keycodeGroup.flatMap((keycodeGroup) => keycodeGroup.keycodes)

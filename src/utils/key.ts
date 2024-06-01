@@ -1,4 +1,4 @@
-import { allKeyCode, IKeycodeGroupItem, keycodeGroup } from 'src/utils/keycode-group'
+import { allBasicKeyCode, IKeycodeGroupItem, keycodeGroup } from 'src/utils/keycode-group'
 import { advancedKeycodeToString, advancedStringToKeycode } from './advanced-keys'
 import {
 	BuiltInKeycodeModule,
@@ -353,22 +353,25 @@ function buildLayerMenu(): IKeycodeMenu {
 		],
 	}
 
+	const keycodesGroup: IKeycodeGroupItem[] = []
+
+	const keycodes = menu.keycodes.flatMap((keycode) => {
+		let res: IKeycode[] = []
+		for (let idx = 0; idx < 10; idx++) {
+			const newTitle = (keycode.title || '').replace('layer', `layer ${idx}`)
+			const newCode = keycode.code.replace('layer', `${idx}`)
+			const newName = `${keycode.name}(${idx})`
+			res = [...res, { ...keycode, name: newName, title: newTitle, code: newCode }]
+		}
+		keycodesGroup.push({ name: keycode.name, keycodes: res })
+		return res
+	})
+
 	// Statically generate layer codes from 0-9 instead of making it an input
 	return {
+		keycodeGroup: [...keycodesGroup, { name: 'Other', keycodes: hardCodedKeycodes }],
 		...menu,
-		keycodes: [
-			...hardCodedKeycodes,
-			...menu.keycodes.flatMap((keycode) => {
-				let res: IKeycode[] = []
-				for (let idx = 0; idx < 10; idx++) {
-					const newTitle = (keycode.title || '').replace('layer', `layer ${idx}`)
-					const newCode = keycode.code.replace('layer', `${idx}`)
-					const newName = `${keycode.name}(${idx})`
-					res = [...res, { ...keycode, name: newName, title: newTitle, code: newCode }]
-				}
-				return res
-			}),
-		],
+		keycodes: [...hardCodedKeycodes, ...keycodes],
 	}
 }
 
@@ -388,7 +391,7 @@ export function getKeycodes(numMacros = 16): IKeycodeMenu[] {
 		{
 			id: 'basic',
 			label: 'Basic',
-			keycodes: allKeyCode,
+			keycodes: allBasicKeyCode,
 			keycodeGroup,
 		},
 		{
@@ -498,6 +501,20 @@ export function getKeycodes(numMacros = 16): IKeycodeMenu[] {
 				{ name: 'Fast Forward', code: 'KC_MFFD', title: 'Fast Forward' },
 				{ name: 'Select', code: 'KC_MSEL', title: 'Media Select' },
 				{ name: 'Eject', code: 'KC_EJCT', title: 'Media Eject' },
+
+				{ name: 'Audio On', code: 'AU_ON' },
+				{ name: 'Audio Off', code: 'AU_OFF' },
+				{ name: 'Audio Toggle', code: 'AU_TOG' },
+				{ name: 'Clicky Toggle', code: 'CLICKY_TOGGLE' },
+				{ name: 'Clicky Enable', code: 'CLICKY_ENABLE' },
+				{ name: 'Clicky Disable', code: 'CLICKY_DISABLE' },
+				{ name: 'Clicky Up', code: 'CLICKY_UP' },
+				{ name: 'Clicky Down', code: 'CLICKY_DOWN' },
+				{ name: 'Clicky Reset', code: 'CLICKY_RESET' },
+				{ name: 'Music On', code: 'MU_ON' },
+				{ name: 'Music Off', code: 'MU_OFF' },
+				{ name: 'Music Toggle', code: 'MU_TOG' },
+				{ name: 'Music Mode', code: 'MU_MOD' },
 			],
 		},
 		{
@@ -507,6 +524,32 @@ export function getKeycodes(numMacros = 16): IKeycodeMenu[] {
 			keycodes: generateMacros(numMacros),
 		},
 		buildLayerMenu(),
+		{
+			id: 'mouse',
+			label: 'Mouse',
+			width: 'label',
+			keycodes: [
+				{ name: 'Mouse ↑', code: 'KC_MS_UP' },
+				{ name: 'Mouse ↓', code: 'KC_MS_DOWN' },
+				{ name: 'Mouse ←', code: 'KC_MS_LEFT' },
+				{ name: 'Mouse →', code: 'KC_MS_RIGHT' },
+				{ name: 'Mouse Btn1', code: 'KC_MS_BTN1' },
+				{ name: 'Mouse Btn2', code: 'KC_MS_BTN2' },
+				{ name: 'Mouse Btn3', code: 'KC_MS_BTN3' },
+				{ name: 'Mouse Btn4', code: 'KC_MS_BTN4' },
+				{ name: 'Mouse Btn5', code: 'KC_MS_BTN5' },
+				{ name: 'Mouse Btn6', code: 'KC_MS_BTN6' },
+				{ name: 'Mouse Btn7', code: 'KC_MS_BTN7' },
+				{ name: 'Mouse Btn8', code: 'KC_MS_BTN8' },
+				{ name: 'Mouse Wh ↑', code: 'KC_MS_WH_UP' },
+				{ name: 'Mouse Wh ↓', code: 'KC_MS_WH_DOWN' },
+				{ name: 'Mouse Wh ←', code: 'KC_MS_WH_LEFT' },
+				{ name: 'Mouse Wh →', code: 'KC_MS_WH_RIGHT' },
+				{ name: 'Mouse Acc0', code: 'KC_MS_ACCEL0' },
+				{ name: 'Mouse Acc1', code: 'KC_MS_ACCEL1' },
+				{ name: 'Mouse Acc2', code: 'KC_MS_ACCEL2' },
+			],
+		},
 		{
 			id: 'special',
 			label: 'Special',
@@ -644,42 +687,6 @@ export function getKeycodes(numMacros = 16): IKeycodeMenu[] {
 				{ name: 'F22', code: 'KC_F22' },
 				{ name: 'F23', code: 'KC_F23' },
 				{ name: 'F24', code: 'KC_F24' },
-
-				// TODO: move these to a new group
-				{ name: 'Mouse ↑', code: 'KC_MS_UP' },
-				{ name: 'Mouse ↓', code: 'KC_MS_DOWN' },
-				{ name: 'Mouse ←', code: 'KC_MS_LEFT' },
-				{ name: 'Mouse →', code: 'KC_MS_RIGHT' },
-				{ name: 'Mouse Btn1', code: 'KC_MS_BTN1' },
-				{ name: 'Mouse Btn2', code: 'KC_MS_BTN2' },
-				{ name: 'Mouse Btn3', code: 'KC_MS_BTN3' },
-				{ name: 'Mouse Btn4', code: 'KC_MS_BTN4' },
-				{ name: 'Mouse Btn5', code: 'KC_MS_BTN5' },
-				{ name: 'Mouse Btn6', code: 'KC_MS_BTN6' },
-				{ name: 'Mouse Btn7', code: 'KC_MS_BTN7' },
-				{ name: 'Mouse Btn8', code: 'KC_MS_BTN8' },
-				{ name: 'Mouse Wh ↑', code: 'KC_MS_WH_UP' },
-				{ name: 'Mouse Wh ↓', code: 'KC_MS_WH_DOWN' },
-				{ name: 'Mouse Wh ←', code: 'KC_MS_WH_LEFT' },
-				{ name: 'Mouse Wh →', code: 'KC_MS_WH_RIGHT' },
-				{ name: 'Mouse Acc0', code: 'KC_MS_ACCEL0' },
-				{ name: 'Mouse Acc1', code: 'KC_MS_ACCEL1' },
-				{ name: 'Mouse Acc2', code: 'KC_MS_ACCEL2' },
-
-				// TODO: move these to a new group
-				{ name: 'Audio On', code: 'AU_ON' },
-				{ name: 'Audio Off', code: 'AU_OFF' },
-				{ name: 'Audio Toggle', code: 'AU_TOG' },
-				{ name: 'Clicky Toggle', code: 'CLICKY_TOGGLE' },
-				{ name: 'Clicky Enable', code: 'CLICKY_ENABLE' },
-				{ name: 'Clicky Disable', code: 'CLICKY_DISABLE' },
-				{ name: 'Clicky Up', code: 'CLICKY_UP' },
-				{ name: 'Clicky Down', code: 'CLICKY_DOWN' },
-				{ name: 'Clicky Reset', code: 'CLICKY_RESET' },
-				{ name: 'Music On', code: 'MU_ON' },
-				{ name: 'Music Off', code: 'MU_OFF' },
-				{ name: 'Music Toggle', code: 'MU_TOG' },
-				{ name: 'Music Mode', code: 'MU_MOD' },
 			],
 		},
 		/* These are for controlling the original backlighting and bottom RGB. */
@@ -748,7 +755,7 @@ export function getKeycodes(numMacros = 16): IKeycodeMenu[] {
 
 export const categoriesForKeycodeModule = (keycodeModule: BuiltInKeycodeModule | 'default') =>
 	({
-		default: ['basic', 'media', 'macro', 'layers', 'special'],
+		default: ['basic', 'media', 'macro', 'layers', 'special', 'mouse'],
 		[BuiltInKeycodeModule.WTLighting]: ['wt_lighting'],
 		[BuiltInKeycodeModule.QMKLighting]: ['qmk_lighting'],
 	})[keycodeModule]

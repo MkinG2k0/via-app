@@ -179,6 +179,7 @@ export const KeycodePane: FC = () => {
 	const getEnabledMenusV3 = (definition: VIADefinitionV3): IKeycodeMenu[] => {
 		const keycodes = ['default' as const, ...(definition.keycodes || [])]
 		const allowedKeycodes = keycodes.flatMap((keycodeName) => categoriesForKeycodeModule(keycodeName))
+		console.log(allowedKeycodes)
 		if ((selectedDefinition.customKeycodes || []).length !== 0) {
 			allowedKeycodes.push('custom')
 		}
